@@ -1,0 +1,351 @@
+incident_id,timestamp,location_id,category,severity,description,status
+INC0001,2025-12-21 10:47:16,LOC013,Theft,Low,Theft incident reported around LOC013 area.,Dismissed
+INC0002,2025-05-17 12:04:18,LOC009,Theft,High,Theft incident reported around LOC009 area.,Pending
+INC0003,2025-03-04 17:07:50,LOC003,Burglary,Medium,Burglary incident reported around LOC003 area.,Pending
+INC0004,2025-09-15 07:02:18,LOC006,Phone Snatching,Medium,Phone Snatching incident reported around LOC006 area.,Resolved
+INC0005,2025-06-05 05:23:20,LOC013,Theft,Low,Theft incident reported around LOC013 area.,Dismissed
+INC0006,2025-04-21 04:25:53,LOC015,Burglary,Low,Burglary incident reported around LOC015 area.,Under Investigation
+INC0007,2025-01-05 20:59:47,LOC002,Vandalism,Low,Vandalism incident reported around LOC002 area.,Pending
+INC0008,2025-08-07 21:59:48,LOC015,Burglary,Medium,Burglary incident reported around LOC015 area.,Resolved
+INC0009,2025-12-25 14:38:58,LOC013,Phone Snatching,Medium,Phone Snatching incident reported around LOC013 area.,Pending
+INC0010,2025-08-08 13:06:51,LOC015,Theft,High,Theft incident reported around LOC015 area.,Under Investigation
+INC0011,2025-08-11 10:46:02,LOC010,Burglary,Medium,Burglary incident reported around LOC010 area.,Under Investigation
+INC0012,2025-07-05 16:35:28,LOC015,Phone Snatching,Medium,Phone Snatching incident reported around LOC015 area.,Dismissed
+INC0013,2025-07-25 10:34:03,LOC011,Theft,Low,Theft incident reported around LOC011 area.,Under Investigation
+INC0014,2025-10-10 14:36:11,LOC005,Phone Snatching,Medium,Phone Snatching incident reported around LOC005 area.,Dismissed
+INC0015,2025-01-08 02:12:52,LOC005,Assault,High,Assault incident reported around LOC005 area.,Under Investigation
+INC0016,2025-05-14 23:48:40,LOC015,Vandalism,Low,Vandalism incident reported around LOC015 area.,Dismissed
+INC0017,2025-01-12 17:13:19,LOC011,Phone Snatching,Medium,Phone Snatching incident reported around LOC011 area.,Under Investigation
+INC0018,2025-04-23 14:11:39,LOC011,Burglary,Medium,Burglary incident reported around LOC011 area.,Under Investigation
+INC0019,2025-09-21 04:04:11,LOC001,Assault,Low,Assault incident reported around LOC001 area.,Pending
+INC0020,2025-11-18 04:27:09,LOC001,Theft,Critical,Theft incident reported around LOC001 area.,Pending
+INC0021,2025-11-02 18:45:56,LOC011,Theft,Low,Theft incident reported around LOC011 area.,Pending
+INC0022,2025-04-01 09:53:27,LOC009,Burglary,Low,Burglary incident reported around LOC009 area.,Under Investigation
+INC0023,2025-01-01 17:36:13,LOC014,Assault,Low,Assault incident reported around LOC014 area.,Dismissed
+INC0024,2025-03-17 21:38:37,LOC008,Assault,Medium,Assault incident reported around LOC008 area.,Resolved
+INC0025,2025-07-28 03:03:32,LOC012,Phone Snatching,Low,Phone Snatching incident reported around LOC012 area.,Pending
+INC0026,2025-10-13 22:16:20,LOC014,Phone Snatching,Low,Phone Snatching incident reported around LOC014 area.,Resolved
+INC0027,2025-01-13 18:39:26,LOC009,Theft,Medium,Theft incident reported around LOC009 area.,Resolved
+INC0028,2025-09-04 07:50:27,LOC014,Burglary,Low,Burglary incident reported around LOC014 area.,Under Investigation
+INC0029,2025-10-10 14:48:28,LOC015,Theft,Medium,Theft incident reported around LOC015 area.,Pending
+INC0030,2025-03-09 01:17:55,LOC006,Theft,Medium,Theft incident reported around LOC006 area.,Under Investigation
+INC0031,2025-01-11 04:11:45,LOC007,Burglary,High,Burglary incident reported around LOC007 area.,Resolved
+INC0032,2025-08-08 14:20:10,LOC010,Trespassing,High,Trespassing incident reported around LOC010 area.,Resolved
+INC0033,2025-01-06 23:34:46,LOC010,Burglary,Medium,Burglary incident reported around LOC010 area.,Dismissed
+INC0034,2025-07-29 08:34:25,LOC001,Assault,Critical,Assault incident reported around LOC001 area.,Pending
+INC0035,2025-02-10 17:24:32,LOC009,Phone Snatching,Low,Phone Snatching incident reported around LOC009 area.,Dismissed
+INC0036,2025-10-06 10:55:53,LOC001,Phone Snatching,Medium,Phone Snatching incident reported around LOC001 area.,Dismissed
+INC0037,2025-07-12 11:31:43,LOC009,Assault,Medium,Assault incident reported around LOC009 area.,Pending
+INC0038,2025-07-06 18:42:44,LOC008,Burglary,Medium,Burglary incident reported around LOC008 area.,Under Investigation
+INC0039,2025-02-19 19:31:57,LOC004,Theft,Medium,Theft incident reported around LOC004 area.,Dismissed
+INC0040,2025-02-24 04:30:18,LOC013,Trespassing,Medium,Trespassing incident reported around LOC013 area.,Pending
+INC0041,2025-09-18 11:25:55,LOC008,Burglary,Low,Burglary incident reported around LOC008 area.,Under Investigation
+INC0042,2025-06-12 05:50:42,LOC005,Vandalism,Low,Vandalism incident reported around LOC005 area.,Under Investigation
+INC0043,2025-01-08 17:54:37,LOC011,Theft,Medium,Theft incident reported around LOC011 area.,Under Investigation
+INC0044,2025-06-29 18:53:00,LOC002,Vandalism,Medium,Vandalism incident reported around LOC002 area.,Resolved
+INC0045,2025-10-06 13:34:16,LOC011,Theft,Low,Theft incident reported around LOC011 area.,Pending
+INC0046,2025-01-19 01:11:02,LOC002,Phone Snatching,Low,Phone Snatching incident reported around LOC002 area.,Under Investigation
+INC0047,2025-04-11 12:11:50,LOC003,Trespassing,Low,Trespassing incident reported around LOC003 area.,Under Investigation
+INC0048,2025-06-20 04:28:39,LOC006,Vandalism,Medium,Vandalism incident reported around LOC006 area.,Pending
+INC0049,2025-02-14 21:17:34,LOC007,Theft,Medium,Theft incident reported around LOC007 area.,Under Investigation
+INC0050,2025-02-10 01:59:35,LOC011,Burglary,Medium,Burglary incident reported around LOC011 area.,Pending
+INC0051,2025-08-18 21:26:30,LOC002,Theft,Medium,Theft incident reported around LOC002 area.,Under Investigation
+INC0052,2025-02-14 06:40:09,LOC013,Burglary,Low,Burglary incident reported around LOC013 area.,Dismissed
+INC0053,2025-03-23 11:09:51,LOC004,Burglary,Low,Burglary incident reported around LOC004 area.,Resolved
+INC0054,2025-04-24 22:20:58,LOC001,Phone Snatching,Low,Phone Snatching incident reported around LOC001 area.,Resolved
+INC0055,2025-11-26 11:58:48,LOC007,Theft,Low,Theft incident reported around LOC007 area.,Resolved
+INC0056,2025-12-19 10:56:44,LOC001,Theft,Medium,Theft incident reported around LOC001 area.,Resolved
+INC0057,2025-01-16 19:27:16,LOC015,Burglary,Low,Burglary incident reported around LOC015 area.,Resolved
+INC0058,2025-08-26 12:32:57,LOC006,Theft,Low,Theft incident reported around LOC006 area.,Dismissed
+INC0059,2025-07-19 19:25:47,LOC013,Theft,High,Theft incident reported around LOC013 area.,Pending
+INC0060,2025-06-09 11:38:20,LOC014,Theft,Low,Theft incident reported around LOC014 area.,Dismissed
+INC0061,2025-06-23 13:12:14,LOC015,Theft,Low,Theft incident reported around LOC015 area.,Pending
+INC0062,2025-05-20 08:49:59,LOC004,Theft,High,Theft incident reported around LOC004 area.,Resolved
+INC0063,2025-02-06 01:31:16,LOC010,Theft,High,Theft incident reported around LOC010 area.,Pending
+INC0064,2025-11-14 15:56:52,LOC008,Burglary,Medium,Burglary incident reported around LOC008 area.,Dismissed
+INC0065,2025-07-30 21:19:21,LOC002,Vandalism,Medium,Vandalism incident reported around LOC002 area.,Resolved
+INC0066,2025-10-04 02:47:11,LOC010,Theft,Medium,Theft incident reported around LOC010 area.,Under Investigation
+INC0067,2025-01-14 09:37:25,LOC002,Theft,High,Theft incident reported around LOC002 area.,Dismissed
+INC0068,2025-02-17 16:02:02,LOC011,Trespassing,Critical,Trespassing incident reported around LOC011 area.,Under Investigation
+INC0069,2025-09-08 19:02:37,LOC007,Theft,Low,Theft incident reported around LOC007 area.,Under Investigation
+INC0070,2025-01-22 23:19:54,LOC012,Theft,Medium,Theft incident reported around LOC012 area.,Resolved
+INC0071,2025-09-07 21:23:02,LOC014,Theft,High,Theft incident reported around LOC014 area.,Resolved
+INC0072,2025-07-16 13:26:19,LOC008,Theft,Low,Theft incident reported around LOC008 area.,Dismissed
+INC0073,2025-11-28 19:21:33,LOC004,Phone Snatching,Critical,Phone Snatching incident reported around LOC004 area.,Under Investigation
+INC0074,2025-06-12 20:59:57,LOC006,Theft,High,Theft incident reported around LOC006 area.,Pending
+INC0075,2025-06-14 14:05:08,LOC004,Theft,Low,Theft incident reported around LOC004 area.,Dismissed
+INC0076,2025-01-17 10:44:43,LOC003,Burglary,Low,Burglary incident reported around LOC003 area.,Under Investigation
+INC0077,2025-07-06 05:05:49,LOC007,Trespassing,Low,Trespassing incident reported around LOC007 area.,Dismissed
+INC0078,2025-05-22 08:58:06,LOC006,Theft,High,Theft incident reported around LOC006 area.,Dismissed
+INC0079,2025-03-20 15:23:23,LOC013,Assault,Low,Assault incident reported around LOC013 area.,Resolved
+INC0080,2025-04-10 23:15:17,LOC002,Theft,High,Theft incident reported around LOC002 area.,Under Investigation
+INC0081,2025-10-17 20:00:46,LOC008,Phone Snatching,High,Phone Snatching incident reported around LOC008 area.,Resolved
+INC0082,2025-08-11 00:05:10,LOC014,Trespassing,Medium,Trespassing incident reported around LOC014 area.,Pending
+INC0083,2025-08-27 10:18:33,LOC005,Vandalism,High,Vandalism incident reported around LOC005 area.,Dismissed
+INC0084,2025-11-19 21:56:22,LOC003,Burglary,Medium,Burglary incident reported around LOC003 area.,Dismissed
+INC0085,2025-11-10 01:10:06,LOC005,Theft,High,Theft incident reported around LOC005 area.,Dismissed
+INC0086,2025-11-18 12:58:03,LOC008,Burglary,High,Burglary incident reported around LOC008 area.,Dismissed
+INC0087,2025-11-30 22:32:05,LOC002,Theft,Low,Theft incident reported around LOC002 area.,Resolved
+INC0088,2025-06-05 15:51:14,LOC010,Theft,Critical,Theft incident reported around LOC010 area.,Resolved
+INC0089,2025-07-08 04:17:53,LOC008,Burglary,Critical,Burglary incident reported around LOC008 area.,Pending
+INC0090,2025-12-21 05:22:51,LOC015,Theft,Medium,Theft incident reported around LOC015 area.,Resolved
+INC0091,2025-01-21 08:12:44,LOC003,Burglary,Low,Burglary incident reported around LOC003 area.,Dismissed
+INC0092,2025-02-01 21:10:46,LOC008,Vandalism,High,Vandalism incident reported around LOC008 area.,Under Investigation
+INC0093,2025-06-29 13:49:43,LOC008,Burglary,Critical,Burglary incident reported around LOC008 area.,Resolved
+INC0094,2025-01-17 16:57:02,LOC004,Burglary,Medium,Burglary incident reported around LOC004 area.,Under Investigation
+INC0095,2025-04-29 18:15:20,LOC011,Phone Snatching,Medium,Phone Snatching incident reported around LOC011 area.,Pending
+INC0096,2025-05-01 18:12:22,LOC004,Assault,Low,Assault incident reported around LOC004 area.,Dismissed
+INC0097,2025-12-21 10:02:58,LOC012,Theft,Low,Theft incident reported around LOC012 area.,Pending
+INC0098,2025-07-10 10:17:31,LOC001,Phone Snatching,Critical,Phone Snatching incident reported around LOC001 area.,Pending
+INC0099,2025-10-19 05:41:56,LOC011,Theft,High,Theft incident reported around LOC011 area.,Dismissed
+INC0100,2025-03-26 01:02:09,LOC001,Phone Snatching,Low,Phone Snatching incident reported around LOC001 area.,Pending
+INC0101,2025-07-29 21:08:48,LOC015,Assault,Low,Assault incident reported around LOC015 area.,Pending
+INC0102,2025-02-21 15:42:49,LOC005,Assault,Low,Assault incident reported around LOC005 area.,Pending
+INC0103,2025-10-17 05:55:46,LOC004,Burglary,Low,Burglary incident reported around LOC004 area.,Dismissed
+INC0104,2025-03-20 12:09:58,LOC008,Theft,Low,Theft incident reported around LOC008 area.,Pending
+INC0105,2025-01-24 06:12:43,LOC009,Burglary,Low,Burglary incident reported around LOC009 area.,Under Investigation
+INC0106,2025-06-01 17:17:35,LOC014,Theft,Low,Theft incident reported around LOC014 area.,Under Investigation
+INC0107,2025-06-25 00:00:54,LOC010,Phone Snatching,Low,Phone Snatching incident reported around LOC010 area.,Resolved
+INC0108,2025-10-12 19:05:52,LOC009,Theft,Medium,Theft incident reported around LOC009 area.,Pending
+INC0109,2025-02-04 03:31:27,LOC015,Vandalism,High,Vandalism incident reported around LOC015 area.,Pending
+INC0110,2025-04-22 00:54:03,LOC001,Theft,High,Theft incident reported around LOC001 area.,Dismissed
+INC0111,2025-05-27 18:48:48,LOC006,Trespassing,Medium,Trespassing incident reported around LOC006 area.,Dismissed
+INC0112,2025-03-11 06:29:01,LOC014,Theft,High,Theft incident reported around LOC014 area.,Resolved
+INC0113,2025-11-26 11:49:30,LOC008,Theft,Low,Theft incident reported around LOC008 area.,Pending
+INC0114,2025-02-28 21:28:00,LOC012,Vandalism,Medium,Vandalism incident reported around LOC012 area.,Dismissed
+INC0115,2025-01-14 23:31:25,LOC010,Theft,Low,Theft incident reported around LOC010 area.,Resolved
+INC0116,2025-12-01 09:52:35,LOC008,Trespassing,Medium,Trespassing incident reported around LOC008 area.,Dismissed
+INC0117,2025-12-05 21:48:29,LOC008,Theft,Low,Theft incident reported around LOC008 area.,Under Investigation
+INC0118,2025-10-21 03:29:31,LOC003,Vandalism,Medium,Vandalism incident reported around LOC003 area.,Dismissed
+INC0119,2025-03-18 08:34:21,LOC001,Theft,Low,Theft incident reported around LOC001 area.,Under Investigation
+INC0120,2025-04-02 10:45:35,LOC015,Assault,High,Assault incident reported around LOC015 area.,Under Investigation
+INC0121,2025-04-03 20:20:01,LOC005,Phone Snatching,Low,Phone Snatching incident reported around LOC005 area.,Resolved
+INC0122,2025-04-30 07:33:13,LOC012,Phone Snatching,Medium,Phone Snatching incident reported around LOC012 area.,Under Investigation
+INC0123,2025-08-06 02:55:02,LOC009,Theft,Medium,Theft incident reported around LOC009 area.,Resolved
+INC0124,2025-02-23 07:27:57,LOC001,Theft,Low,Theft incident reported around LOC001 area.,Resolved
+INC0125,2025-07-14 23:54:50,LOC012,Burglary,Low,Burglary incident reported around LOC012 area.,Resolved
+INC0126,2025-04-17 09:28:04,LOC001,Trespassing,Low,Trespassing incident reported around LOC001 area.,Resolved
+INC0127,2025-08-06 15:29:18,LOC004,Theft,Medium,Theft incident reported around LOC004 area.,Dismissed
+INC0128,2025-02-16 10:03:48,LOC009,Vandalism,Low,Vandalism incident reported around LOC009 area.,Under Investigation
+INC0129,2025-10-27 20:25:03,LOC007,Phone Snatching,Low,Phone Snatching incident reported around LOC007 area.,Resolved
+INC0130,2025-06-01 09:20:01,LOC015,Theft,Low,Theft incident reported around LOC015 area.,Resolved
+INC0131,2025-11-13 15:53:18,LOC002,Burglary,Low,Burglary incident reported around LOC002 area.,Pending
+INC0132,2025-03-22 09:34:04,LOC011,Theft,Low,Theft incident reported around LOC011 area.,Dismissed
+INC0133,2025-05-16 12:27:28,LOC005,Burglary,Low,Burglary incident reported around LOC005 area.,Resolved
+INC0134,2025-03-20 11:38:44,LOC012,Vandalism,Low,Vandalism incident reported around LOC012 area.,Dismissed
+INC0135,2025-02-10 13:26:16,LOC014,Burglary,Low,Burglary incident reported around LOC014 area.,Resolved
+INC0136,2025-05-26 09:23:23,LOC012,Theft,Critical,Theft incident reported around LOC012 area.,Dismissed
+INC0137,2025-07-12 16:29:33,LOC015,Theft,Medium,Theft incident reported around LOC015 area.,Pending
+INC0138,2025-12-14 16:55:36,LOC013,Theft,Medium,Theft incident reported around LOC013 area.,Under Investigation
+INC0139,2025-05-05 01:04:49,LOC002,Assault,Low,Assault incident reported around LOC002 area.,Under Investigation
+INC0140,2025-09-26 08:42:51,LOC002,Burglary,Low,Burglary incident reported around LOC002 area.,Pending
+INC0141,2025-12-05 15:19:26,LOC002,Theft,Medium,Theft incident reported around LOC002 area.,Under Investigation
+INC0142,2025-08-17 03:46:59,LOC009,Theft,High,Theft incident reported around LOC009 area.,Dismissed
+INC0143,2025-04-09 08:03:26,LOC005,Burglary,High,Burglary incident reported around LOC005 area.,Under Investigation
+INC0144,2025-05-25 05:01:50,LOC002,Burglary,High,Burglary incident reported around LOC002 area.,Under Investigation
+INC0145,2025-06-27 01:03:57,LOC006,Assault,Low,Assault incident reported around LOC006 area.,Resolved
+INC0146,2025-06-24 18:35:46,LOC005,Phone Snatching,Medium,Phone Snatching incident reported around LOC005 area.,Dismissed
+INC0147,2025-05-02 05:45:06,LOC002,Burglary,Medium,Burglary incident reported around LOC002 area.,Dismissed
+INC0148,2025-07-31 08:58:14,LOC013,Burglary,Medium,Burglary incident reported around LOC013 area.,Pending
+INC0149,2025-07-05 12:26:41,LOC013,Theft,Medium,Theft incident reported around LOC013 area.,Dismissed
+INC0150,2025-07-31 05:12:37,LOC006,Trespassing,Low,Trespassing incident reported around LOC006 area.,Under Investigation
+INC0151,2025-04-02 17:56:24,LOC007,Theft,Low,Theft incident reported around LOC007 area.,Dismissed
+INC0152,2025-05-31 01:13:00,LOC012,Phone Snatching,Medium,Phone Snatching incident reported around LOC012 area.,Resolved
+INC0153,2025-07-19 04:09:37,LOC011,Assault,Low,Assault incident reported around LOC011 area.,Resolved
+INC0154,2025-08-20 05:44:52,LOC011,Burglary,Medium,Burglary incident reported around LOC011 area.,Pending
+INC0155,2025-11-07 09:46:18,LOC001,Trespassing,Medium,Trespassing incident reported around LOC001 area.,Pending
+INC0156,2025-09-26 04:05:47,LOC012,Phone Snatching,Critical,Phone Snatching incident reported around LOC012 area.,Under Investigation
+INC0157,2025-09-01 17:59:54,LOC007,Theft,High,Theft incident reported around LOC007 area.,Resolved
+INC0158,2025-02-09 00:51:10,LOC004,Assault,High,Assault incident reported around LOC004 area.,Under Investigation
+INC0159,2025-03-18 04:37:10,LOC014,Assault,Low,Assault incident reported around LOC014 area.,Resolved
+INC0160,2025-01-13 17:52:41,LOC014,Theft,Medium,Theft incident reported around LOC014 area.,Resolved
+INC0161,2025-08-30 02:12:55,LOC003,Assault,Low,Assault incident reported around LOC003 area.,Pending
+INC0162,2025-12-09 09:58:30,LOC012,Vandalism,Medium,Vandalism incident reported around LOC012 area.,Under Investigation
+INC0163,2025-03-13 20:04:48,LOC013,Vandalism,High,Vandalism incident reported around LOC013 area.,Pending
+INC0164,2025-05-30 22:37:51,LOC010,Burglary,Medium,Burglary incident reported around LOC010 area.,Dismissed
+INC0165,2025-01-03 05:25:16,LOC001,Theft,Critical,Theft incident reported around LOC001 area.,Under Investigation
+INC0166,2025-05-31 09:07:42,LOC004,Theft,Low,Theft incident reported around LOC004 area.,Under Investigation
+INC0167,2025-08-21 23:11:23,LOC014,Assault,High,Assault incident reported around LOC014 area.,Under Investigation
+INC0168,2025-12-08 09:50:43,LOC004,Burglary,Medium,Burglary incident reported around LOC004 area.,Pending
+INC0169,2025-04-29 06:19:37,LOC010,Burglary,Medium,Burglary incident reported around LOC010 area.,Dismissed
+INC0170,2025-10-21 03:46:44,LOC006,Trespassing,Critical,Trespassing incident reported around LOC006 area.,Pending
+INC0171,2025-01-07 22:26:58,LOC012,Burglary,High,Burglary incident reported around LOC012 area.,Pending
+INC0172,2025-06-12 07:04:54,LOC006,Theft,High,Theft incident reported around LOC006 area.,Resolved
+INC0173,2025-07-13 10:08:27,LOC005,Theft,Medium,Theft incident reported around LOC005 area.,Dismissed
+INC0174,2025-12-16 11:30:57,LOC004,Phone Snatching,Low,Phone Snatching incident reported around LOC004 area.,Dismissed
+INC0175,2025-06-30 04:54:08,LOC008,Theft,Low,Theft incident reported around LOC008 area.,Dismissed
+INC0176,2025-04-21 11:44:49,LOC009,Trespassing,High,Trespassing incident reported around LOC009 area.,Resolved
+INC0177,2025-08-15 08:22:16,LOC011,Theft,Low,Theft incident reported around LOC011 area.,Under Investigation
+INC0178,2025-08-02 12:32:43,LOC002,Trespassing,Critical,Trespassing incident reported around LOC002 area.,Resolved
+INC0179,2025-09-20 22:44:54,LOC010,Burglary,Low,Burglary incident reported around LOC010 area.,Resolved
+INC0180,2025-08-08 00:16:47,LOC013,Theft,Low,Theft incident reported around LOC013 area.,Pending
+INC0181,2025-07-17 09:39:03,LOC004,Theft,Low,Theft incident reported around LOC004 area.,Under Investigation
+INC0182,2025-01-25 16:55:45,LOC008,Theft,High,Theft incident reported around LOC008 area.,Resolved
+INC0183,2025-10-08 09:46:35,LOC009,Vandalism,Medium,Vandalism incident reported around LOC009 area.,Pending
+INC0184,2025-05-07 05:14:36,LOC007,Burglary,Low,Burglary incident reported around LOC007 area.,Pending
+INC0185,2025-06-24 18:44:03,LOC006,Theft,Medium,Theft incident reported around LOC006 area.,Dismissed
+INC0186,2025-06-18 19:36:04,LOC009,Vandalism,Medium,Vandalism incident reported around LOC009 area.,Resolved
+INC0187,2025-05-08 02:11:22,LOC001,Phone Snatching,Low,Phone Snatching incident reported around LOC001 area.,Resolved
+INC0188,2025-03-04 06:32:05,LOC010,Theft,Low,Theft incident reported around LOC010 area.,Pending
+INC0189,2025-10-09 18:53:54,LOC001,Theft,High,Theft incident reported around LOC001 area.,Resolved
+INC0190,2025-06-22 02:03:24,LOC011,Assault,Low,Assault incident reported around LOC011 area.,Under Investigation
+INC0191,2025-08-08 03:54:28,LOC012,Assault,Low,Assault incident reported around LOC012 area.,Pending
+INC0192,2025-04-05 01:15:22,LOC005,Vandalism,Medium,Vandalism incident reported around LOC005 area.,Dismissed
+INC0193,2025-09-01 15:21:54,LOC014,Assault,Low,Assault incident reported around LOC014 area.,Resolved
+INC0194,2025-10-03 12:30:40,LOC010,Phone Snatching,Low,Phone Snatching incident reported around LOC010 area.,Resolved
+INC0195,2025-04-14 21:53:22,LOC001,Assault,Low,Assault incident reported around LOC001 area.,Dismissed
+INC0196,2025-03-13 18:47:39,LOC008,Theft,Low,Theft incident reported around LOC008 area.,Resolved
+INC0197,2025-04-29 10:59:21,LOC004,Theft,Medium,Theft incident reported around LOC004 area.,Dismissed
+INC0198,2025-05-17 12:26:34,LOC010,Theft,Medium,Theft incident reported around LOC010 area.,Under Investigation
+INC0199,2025-12-19 08:04:31,LOC011,Phone Snatching,Low,Phone Snatching incident reported around LOC011 area.,Dismissed
+INC0200,2025-02-13 06:29:35,LOC003,Assault,Low,Assault incident reported around LOC003 area.,Under Investigation
+INC0201,2025-01-08 22:08:40,LOC005,Burglary,Medium,Burglary incident reported around LOC005 area.,Resolved
+INC0202,2025-07-07 00:54:39,LOC008,Burglary,Medium,Burglary incident reported around LOC008 area.,Dismissed
+INC0203,2025-06-19 11:47:24,LOC005,Trespassing,Low,Trespassing incident reported around LOC005 area.,Resolved
+INC0204,2025-06-15 05:20:53,LOC014,Theft,Medium,Theft incident reported around LOC014 area.,Under Investigation
+INC0205,2025-08-08 23:50:19,LOC008,Theft,Low,Theft incident reported around LOC008 area.,Under Investigation
+INC0206,2025-10-01 04:51:20,LOC011,Phone Snatching,Critical,Phone Snatching incident reported around LOC011 area.,Under Investigation
+INC0207,2025-07-23 22:51:40,LOC002,Assault,Low,Assault incident reported around LOC002 area.,Pending
+INC0208,2025-07-07 21:14:28,LOC014,Theft,High,Theft incident reported around LOC014 area.,Resolved
+INC0209,2025-05-31 03:24:50,LOC013,Theft,Critical,Theft incident reported around LOC013 area.,Dismissed
+INC0210,2025-10-21 02:42:41,LOC012,Assault,Medium,Assault incident reported around LOC012 area.,Under Investigation
+INC0211,2025-11-24 08:08:41,LOC002,Assault,Medium,Assault incident reported around LOC002 area.,Pending
+INC0212,2025-07-21 21:58:29,LOC011,Vandalism,High,Vandalism incident reported around LOC011 area.,Under Investigation
+INC0213,2025-03-03 18:46:19,LOC011,Theft,Medium,Theft incident reported around LOC011 area.,Resolved
+INC0214,2025-01-26 12:13:16,LOC001,Burglary,High,Burglary incident reported around LOC001 area.,Under Investigation
+INC0215,2025-03-18 21:23:24,LOC012,Burglary,Low,Burglary incident reported around LOC012 area.,Resolved
+INC0216,2025-09-01 19:11:44,LOC013,Theft,High,Theft incident reported around LOC013 area.,Dismissed
+INC0217,2025-06-24 05:24:30,LOC010,Burglary,Medium,Burglary incident reported around LOC010 area.,Pending
+INC0218,2025-03-19 11:46:10,LOC014,Assault,Low,Assault incident reported around LOC014 area.,Under Investigation
+INC0219,2025-03-13 08:08:00,LOC015,Theft,Medium,Theft incident reported around LOC015 area.,Dismissed
+INC0220,2025-02-14 12:09:26,LOC007,Burglary,Critical,Burglary incident reported around LOC007 area.,Under Investigation
+INC0221,2025-02-13 05:10:44,LOC010,Burglary,Medium,Burglary incident reported around LOC010 area.,Pending
+INC0222,2025-11-26 12:39:53,LOC002,Phone Snatching,High,Phone Snatching incident reported around LOC002 area.,Resolved
+INC0223,2025-12-24 08:25:44,LOC014,Assault,Low,Assault incident reported around LOC014 area.,Under Investigation
+INC0224,2025-09-10 23:50:32,LOC005,Theft,Low,Theft incident reported around LOC005 area.,Dismissed
+INC0225,2025-08-13 13:05:38,LOC003,Theft,Medium,Theft incident reported around LOC003 area.,Pending
+INC0226,2025-04-03 06:54:20,LOC001,Phone Snatching,Low,Phone Snatching incident reported around LOC001 area.,Dismissed
+INC0227,2025-04-15 08:26:35,LOC002,Theft,Low,Theft incident reported around LOC002 area.,Resolved
+INC0228,2025-01-18 02:22:19,LOC002,Theft,Medium,Theft incident reported around LOC002 area.,Pending
+INC0229,2025-11-02 21:19:53,LOC004,Theft,Low,Theft incident reported around LOC004 area.,Under Investigation
+INC0230,2025-05-14 07:38:39,LOC001,Theft,High,Theft incident reported around LOC001 area.,Pending
+INC0231,2025-03-02 17:11:25,LOC013,Theft,Low,Theft incident reported around LOC013 area.,Resolved
+INC0232,2025-07-18 14:18:16,LOC013,Phone Snatching,Medium,Phone Snatching incident reported around LOC013 area.,Pending
+INC0233,2025-06-23 10:05:56,LOC001,Vandalism,Low,Vandalism incident reported around LOC001 area.,Pending
+INC0234,2025-02-10 12:35:44,LOC006,Phone Snatching,Medium,Phone Snatching incident reported around LOC006 area.,Under Investigation
+INC0235,2025-04-29 07:21:45,LOC015,Theft,Low,Theft incident reported around LOC015 area.,Resolved
+INC0236,2025-06-30 01:45:08,LOC003,Trespassing,Medium,Trespassing incident reported around LOC003 area.,Under Investigation
+INC0237,2025-07-08 19:13:27,LOC009,Trespassing,Low,Trespassing incident reported around LOC009 area.,Pending
+INC0238,2025-05-21 02:04:14,LOC008,Assault,Low,Assault incident reported around LOC008 area.,Dismissed
+INC0239,2025-03-25 13:38:11,LOC015,Assault,Low,Assault incident reported around LOC015 area.,Resolved
+INC0240,2025-05-17 19:37:10,LOC008,Burglary,Low,Burglary incident reported around LOC008 area.,Dismissed
+INC0241,2025-09-13 18:49:55,LOC005,Phone Snatching,Medium,Phone Snatching incident reported around LOC005 area.,Resolved
+INC0242,2025-12-11 07:26:38,LOC005,Burglary,High,Burglary incident reported around LOC005 area.,Dismissed
+INC0243,2025-08-20 18:47:49,LOC015,Burglary,Low,Burglary incident reported around LOC015 area.,Pending
+INC0244,2025-07-13 07:58:57,LOC001,Phone Snatching,Medium,Phone Snatching incident reported around LOC001 area.,Dismissed
+INC0245,2025-09-27 14:49:15,LOC013,Theft,High,Theft incident reported around LOC013 area.,Under Investigation
+INC0246,2025-06-29 18:33:51,LOC012,Burglary,Low,Burglary incident reported around LOC012 area.,Dismissed
+INC0247,2025-12-07 04:20:01,LOC005,Theft,Medium,Theft incident reported around LOC005 area.,Resolved
+INC0248,2025-09-29 23:54:46,LOC007,Phone Snatching,Medium,Phone Snatching incident reported around LOC007 area.,Dismissed
+INC0249,2025-05-27 15:12:18,LOC003,Trespassing,Medium,Trespassing incident reported around LOC003 area.,Resolved
+INC0250,2025-02-21 04:16:34,LOC006,Phone Snatching,High,Phone Snatching incident reported around LOC006 area.,Pending
+INC0251,2025-01-31 17:13:47,LOC008,Theft,Low,Theft incident reported around LOC008 area.,Resolved
+INC0252,2025-05-15 22:32:28,LOC001,Phone Snatching,Medium,Phone Snatching incident reported around LOC001 area.,Resolved
+INC0253,2025-10-02 01:58:19,LOC008,Burglary,Critical,Burglary incident reported around LOC008 area.,Resolved
+INC0254,2025-05-06 20:56:50,LOC004,Theft,Low,Theft incident reported around LOC004 area.,Dismissed
+INC0255,2025-01-16 12:43:16,LOC012,Phone Snatching,Medium,Phone Snatching incident reported around LOC012 area.,Under Investigation
+INC0256,2025-04-17 23:31:59,LOC007,Vandalism,Low,Vandalism incident reported around LOC007 area.,Under Investigation
+INC0257,2025-04-26 18:35:26,LOC006,Phone Snatching,Medium,Phone Snatching incident reported around LOC006 area.,Pending
+INC0258,2025-09-07 12:31:24,LOC011,Theft,Low,Theft incident reported around LOC011 area.,Under Investigation
+INC0259,2025-02-25 10:34:29,LOC013,Burglary,Low,Burglary incident reported around LOC013 area.,Dismissed
+INC0260,2025-05-03 13:58:58,LOC002,Theft,High,Theft incident reported around LOC002 area.,Under Investigation
+INC0261,2025-09-02 02:03:41,LOC007,Trespassing,Low,Trespassing incident reported around LOC007 area.,Pending
+INC0262,2025-09-23 23:56:18,LOC013,Phone Snatching,Low,Phone Snatching incident reported around LOC013 area.,Dismissed
+INC0263,2025-04-21 11:50:24,LOC013,Burglary,Medium,Burglary incident reported around LOC013 area.,Resolved
+INC0264,2025-11-19 13:38:26,LOC008,Theft,Medium,Theft incident reported around LOC008 area.,Pending
+INC0265,2025-03-23 23:59:37,LOC013,Burglary,Low,Burglary incident reported around LOC013 area.,Dismissed
+INC0266,2025-06-10 18:30:34,LOC010,Phone Snatching,Low,Phone Snatching incident reported around LOC010 area.,Resolved
+INC0267,2025-01-03 13:21:25,LOC013,Vandalism,Medium,Vandalism incident reported around LOC013 area.,Under Investigation
+INC0268,2025-11-19 17:30:51,LOC003,Assault,Low,Assault incident reported around LOC003 area.,Dismissed
+INC0269,2025-06-16 16:20:52,LOC013,Burglary,Medium,Burglary incident reported around LOC013 area.,Under Investigation
+INC0270,2025-06-29 23:27:04,LOC010,Assault,Low,Assault incident reported around LOC010 area.,Pending
+INC0271,2025-11-02 04:26:32,LOC002,Phone Snatching,Low,Phone Snatching incident reported around LOC002 area.,Dismissed
+INC0272,2025-07-20 20:47:03,LOC007,Vandalism,Medium,Vandalism incident reported around LOC007 area.,Under Investigation
+INC0273,2025-12-23 06:26:45,LOC012,Assault,Low,Assault incident reported around LOC012 area.,Resolved
+INC0274,2025-03-20 13:43:35,LOC011,Vandalism,High,Vandalism incident reported around LOC011 area.,Resolved
+INC0275,2025-03-20 04:16:33,LOC014,Theft,Medium,Theft incident reported around LOC014 area.,Pending
+INC0276,2025-01-01 21:06:05,LOC013,Theft,Low,Theft incident reported around LOC013 area.,Pending
+INC0277,2025-08-19 22:28:57,LOC005,Theft,Low,Theft incident reported around LOC005 area.,Under Investigation
+INC0278,2025-08-31 22:01:18,LOC007,Burglary,Medium,Burglary incident reported around LOC007 area.,Pending
+INC0279,2025-04-10 14:00:34,LOC015,Theft,Low,Theft incident reported around LOC015 area.,Dismissed
+INC0280,2025-06-15 02:59:09,LOC005,Phone Snatching,Low,Phone Snatching incident reported around LOC005 area.,Resolved
+INC0281,2025-11-14 11:53:34,LOC015,Theft,High,Theft incident reported around LOC015 area.,Pending
+INC0282,2025-01-06 08:29:49,LOC007,Assault,Low,Assault incident reported around LOC007 area.,Under Investigation
+INC0283,2025-11-30 08:25:40,LOC002,Theft,High,Theft incident reported around LOC002 area.,Dismissed
+INC0284,2025-07-08 09:39:44,LOC001,Theft,Medium,Theft incident reported around LOC001 area.,Under Investigation
+INC0285,2025-04-09 12:44:41,LOC010,Burglary,Medium,Burglary incident reported around LOC010 area.,Under Investigation
+INC0286,2025-04-10 10:05:19,LOC014,Theft,High,Theft incident reported around LOC014 area.,Pending
+INC0287,2025-01-04 15:35:51,LOC010,Theft,Low,Theft incident reported around LOC010 area.,Dismissed
+INC0288,2025-04-27 23:32:28,LOC008,Phone Snatching,Medium,Phone Snatching incident reported around LOC008 area.,Dismissed
+INC0289,2025-05-04 13:15:15,LOC012,Vandalism,Medium,Vandalism incident reported around LOC012 area.,Under Investigation
+INC0290,2025-11-24 13:43:07,LOC009,Theft,Low,Theft incident reported around LOC009 area.,Under Investigation
+INC0291,2025-08-01 03:14:10,LOC007,Assault,Medium,Assault incident reported around LOC007 area.,Under Investigation
+INC0292,2025-02-14 22:45:45,LOC014,Theft,Medium,Theft incident reported around LOC014 area.,Under Investigation
+INC0293,2025-04-27 05:20:50,LOC010,Theft,Low,Theft incident reported around LOC010 area.,Resolved
+INC0294,2025-04-29 11:14:34,LOC004,Theft,Critical,Theft incident reported around LOC004 area.,Resolved
+INC0295,2025-07-10 20:27:31,LOC004,Assault,Critical,Assault incident reported around LOC004 area.,Pending
+INC0296,2025-11-07 05:33:29,LOC002,Burglary,Medium,Burglary incident reported around LOC002 area.,Dismissed
+INC0297,2025-02-07 16:58:06,LOC009,Burglary,Low,Burglary incident reported around LOC009 area.,Resolved
+INC0298,2025-12-06 06:54:37,LOC009,Phone Snatching,Low,Phone Snatching incident reported around LOC009 area.,Pending
+INC0299,2025-06-14 18:31:16,LOC005,Burglary,Critical,Burglary incident reported around LOC005 area.,Dismissed
+INC0300,2025-03-16 03:05:35,LOC015,Theft,Low,Theft incident reported around LOC015 area.,Resolved
+INC0301,2025-09-06 01:49:25,LOC005,Theft,Critical,Theft incident reported around LOC005 area.,Resolved
+INC0302,2025-06-20 18:34:51,LOC003,Theft,High,Theft incident reported around LOC003 area.,Pending
+INC0303,2025-09-04 03:11:10,LOC003,Phone Snatching,High,Phone Snatching incident reported around LOC003 area.,Pending
+INC0304,2025-10-30 22:09:54,LOC002,Theft,Low,Theft incident reported around LOC002 area.,Pending
+INC0305,2025-01-13 17:04:05,LOC004,Assault,Critical,Assault incident reported around LOC004 area.,Under Investigation
+INC0306,2025-04-18 15:34:16,LOC013,Phone Snatching,High,Phone Snatching incident reported around LOC013 area.,Dismissed
+INC0307,2025-02-23 11:23:19,LOC010,Phone Snatching,Medium,Phone Snatching incident reported around LOC010 area.,Under Investigation
+INC0308,2025-01-14 12:51:58,LOC008,Assault,Medium,Assault incident reported around LOC008 area.,Resolved
+INC0309,2025-09-20 19:38:51,LOC014,Phone Snatching,Medium,Phone Snatching incident reported around LOC014 area.,Dismissed
+INC0310,2025-05-21 17:04:54,LOC007,Theft,High,Theft incident reported around LOC007 area.,Dismissed
+INC0311,2025-06-05 18:19:56,LOC011,Theft,Low,Theft incident reported around LOC011 area.,Resolved
+INC0312,2025-07-12 11:10:17,LOC004,Phone Snatching,Medium,Phone Snatching incident reported around LOC004 area.,Resolved
+INC0313,2025-06-27 01:53:28,LOC004,Phone Snatching,Low,Phone Snatching incident reported around LOC004 area.,Dismissed
+INC0314,2025-07-22 05:20:41,LOC002,Burglary,Low,Burglary incident reported around LOC002 area.,Dismissed
+INC0315,2025-01-03 07:15:35,LOC009,Theft,Low,Theft incident reported around LOC009 area.,Under Investigation
+INC0316,2025-09-02 08:02:21,LOC010,Phone Snatching,Low,Phone Snatching incident reported around LOC010 area.,Dismissed
+INC0317,2025-03-21 20:32:10,LOC011,Vandalism,Medium,Vandalism incident reported around LOC011 area.,Under Investigation
+INC0318,2025-11-05 16:36:00,LOC012,Burglary,High,Burglary incident reported around LOC012 area.,Under Investigation
+INC0319,2025-01-14 21:12:21,LOC010,Assault,Low,Assault incident reported around LOC010 area.,Dismissed
+INC0320,2025-01-30 03:28:35,LOC003,Burglary,Medium,Burglary incident reported around LOC003 area.,Dismissed
+INC0321,2025-09-03 11:37:53,LOC010,Burglary,Low,Burglary incident reported around LOC010 area.,Pending
+INC0322,2025-06-06 22:00:55,LOC003,Vandalism,Medium,Vandalism incident reported around LOC003 area.,Resolved
+INC0323,2025-01-19 21:49:13,LOC006,Burglary,Low,Burglary incident reported around LOC006 area.,Resolved
+INC0324,2025-04-10 12:58:04,LOC012,Theft,Low,Theft incident reported around LOC012 area.,Dismissed
+INC0325,2025-08-23 02:02:21,LOC013,Vandalism,Low,Vandalism incident reported around LOC013 area.,Pending
+INC0326,2025-04-18 03:51:59,LOC004,Assault,High,Assault incident reported around LOC004 area.,Pending
+INC0327,2025-07-29 17:26:50,LOC003,Theft,Medium,Theft incident reported around LOC003 area.,Pending
+INC0328,2025-01-31 07:34:11,LOC004,Phone Snatching,Low,Phone Snatching incident reported around LOC004 area.,Pending
+INC0329,2025-04-26 01:28:17,LOC014,Assault,High,Assault incident reported around LOC014 area.,Under Investigation
+INC0330,2025-04-13 13:37:12,LOC007,Assault,High,Assault incident reported around LOC007 area.,Dismissed
+INC0331,2025-08-21 03:00:20,LOC002,Burglary,Low,Burglary incident reported around LOC002 area.,Dismissed
+INC0332,2025-03-19 20:03:35,LOC015,Theft,Low,Theft incident reported around LOC015 area.,Resolved
+INC0333,2025-12-19 00:38:22,LOC008,Assault,Low,Assault incident reported around LOC008 area.,Dismissed
+INC0334,2025-02-21 14:11:31,LOC003,Phone Snatching,Critical,Phone Snatching incident reported around LOC003 area.,Under Investigation
+INC0335,2025-06-17 06:47:14,LOC004,Theft,Medium,Theft incident reported around LOC004 area.,Resolved
+INC0336,2025-09-13 21:28:18,LOC006,Theft,High,Theft incident reported around LOC006 area.,Under Investigation
+INC0337,2025-06-09 09:36:16,LOC013,Assault,High,Assault incident reported around LOC013 area.,Pending
+INC0338,2025-08-22 04:57:27,LOC004,Phone Snatching,Medium,Phone Snatching incident reported around LOC004 area.,Pending
+INC0339,2025-01-10 12:10:18,LOC005,Theft,Medium,Theft incident reported around LOC005 area.,Under Investigation
+INC0340,2025-02-28 13:06:08,LOC009,Theft,Low,Theft incident reported around LOC009 area.,Resolved
+INC0341,2025-09-18 01:15:58,LOC009,Theft,Low,Theft incident reported around LOC009 area.,Pending
+INC0342,2025-07-16 21:20:52,LOC007,Theft,Medium,Theft incident reported around LOC007 area.,Dismissed
+INC0343,2025-04-02 01:30:48,LOC005,Vandalism,Medium,Vandalism incident reported around LOC005 area.,Resolved
+INC0344,2025-12-19 00:42:43,LOC009,Vandalism,Low,Vandalism incident reported around LOC009 area.,Under Investigation
+INC0345,2025-08-11 14:27:09,LOC007,Theft,Low,Theft incident reported around LOC007 area.,Resolved
+INC0346,2025-06-25 07:17:37,LOC013,Vandalism,Medium,Vandalism incident reported around LOC013 area.,Resolved
+INC0347,2025-10-09 09:59:35,LOC014,Theft,Low,Theft incident reported around LOC014 area.,Pending
+INC0348,2025-12-22 04:36:53,LOC014,Theft,Low,Theft incident reported around LOC014 area.,Under Investigation
+INC0349,2025-07-01 20:01:02,LOC002,Theft,High,Theft incident reported around LOC002 area.,Under Investigation
+INC0350,2025-03-31 05:07:54,LOC006,Burglary,Medium,Burglary incident reported around LOC006 area.,Under Investigation

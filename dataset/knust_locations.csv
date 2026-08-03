@@ -1,0 +1,16 @@
+location_id,location_name,latitude,longitude,category,baseline_risk
+LOC001,Unity Hall (Conti),6.6738, -1.5684,Hostel,High
+LOC002,Africa Hall,6.6715, -1.5650,Hostel,Medium
+LOC003,University Hall (Katanga),6.6765, -1.5695,Hostel,High
+LOC004,Independence Hall,6.6740, -1.5720,Hostel,Medium
+LOC005,Queens Hall,6.6730, -1.5700,Hostel,Low
+LOC006,Republic Hall,6.6755, -1.5665,Hostel,Medium
+LOC007,KNUST Main Library,6.6720, -1.5670,Academic,Low
+LOC008,College of Science (CS Block),6.6710, -1.5640,Academic,Low
+LOC009,Commercial Area (Banks & Shops),6.6780, -1.5690,Commercial,High
+LOC010,Brunei Hostels,6.6810, -1.5620,Hostel,High
+LOC011,Ayeduase Gate,6.6685, -1.5610,Gate,High
+LOC012,Gaza/Kotei Gate,6.6790, -1.5580,Gate,High
+LOC013,Sports Stadium,6.6700, -1.5750,Recreation,Medium
+LOC014,Faculty of Law,6.6735, -1.5630,Academic,Low
+LOC015,Engineering Block,6.6750, -1.5620,Academic,Low
