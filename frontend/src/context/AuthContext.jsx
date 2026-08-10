@@ -1,12 +1,19 @@
 import React, { createContext, useContext, useState, useCallback } from 'react';
 import { login as apiLogin } from '../services/api';
 
+// ---------------------------------------------------------------------------
+// Configuration — read from environment variables (set in frontend/.env)
+// ---------------------------------------------------------------------------
+const TOKEN_KEY         = import.meta.env.VITE_TOKEN_KEY         || 'cs_token';
+const USER_KEY          = import.meta.env.VITE_USER_KEY          || 'cs_user';
+const DEMO_EMAIL_DOMAIN = import.meta.env.VITE_DEMO_EMAIL_DOMAIN || 'knust.edu.gh';
+
 const AuthContext = createContext(null);
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(() => {
     try {
-      const stored = localStorage.getItem('cs_user');
+      const stored = localStorage.getItem(USER_KEY);
       return stored ? JSON.parse(stored) : null;
     } catch {
       return null;
@@ -17,21 +24,21 @@ export function AuthProvider({ children }) {
     try {
       const res = await apiLogin({ username, password });
       const { token, user: userData } = res.data;
-      localStorage.setItem('cs_token', token);
-      localStorage.setItem('cs_user', JSON.stringify(userData));
+      localStorage.setItem(TOKEN_KEY, token);
+      localStorage.setItem(USER_KEY, JSON.stringify(userData));
       setUser(userData);
       return { success: true };
     } catch (err) {
       // Graceful fallback for demo if backend is not running
       const mockUsers = {
-        admin:     { id: 1, username: 'admin',     email: 'admin@knust.edu.gh',   role: 'ADMIN' },
-        security1: { id: 2, username: 'security1', email: 'sec@knust.edu.gh',     role: 'SECURITY' },
-        student1:  { id: 3, username: 'student1',  email: 'student1@knust.edu.gh', role: 'STUDENT' },
+        admin:     { id: 1, username: 'admin',     email: `admin@${DEMO_EMAIL_DOMAIN}`,    role: 'ADMIN' },
+        security1: { id: 2, username: 'security1', email: `sec@${DEMO_EMAIL_DOMAIN}`,      role: 'SECURITY' },
+        student1:  { id: 3, username: 'student1',  email: `student1@${DEMO_EMAIL_DOMAIN}`, role: 'STUDENT' },
       };
       if (mockUsers[username] && password) {
         const userData = mockUsers[username];
-        localStorage.setItem('cs_token', `demo-token-${username}`);
-        localStorage.setItem('cs_user', JSON.stringify(userData));
+        localStorage.setItem(TOKEN_KEY, `demo-token-${username}`);
+        localStorage.setItem(USER_KEY, JSON.stringify(userData));
         setUser(userData);
         return { success: true, demo: true };
       }
@@ -40,8 +47,8 @@ export function AuthProvider({ children }) {
   }, []);
 
   const logout = useCallback(() => {
-    localStorage.removeItem('cs_token');
-    localStorage.removeItem('cs_user');
+    localStorage.removeItem(TOKEN_KEY);
+    localStorage.removeItem(USER_KEY);
     setUser(null);
   }, []);
 

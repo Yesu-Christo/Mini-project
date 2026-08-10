@@ -2,6 +2,12 @@ import React, { useEffect, useRef } from 'react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 
+// ---------------------------------------------------------------------------
+// Configuration — read from environment variables (set in frontend/.env)
+// ---------------------------------------------------------------------------
+const DEFAULT_LAT = Number(import.meta.env.VITE_CAMPUS_DEFAULT_LAT) || 6.6738;
+const DEFAULT_LNG = Number(import.meta.env.VITE_CAMPUS_DEFAULT_LNG) || -1.5684;
+
 // Fix default marker icons broken by webpack/vite
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
@@ -28,7 +34,7 @@ const RISK_CONFIG = {
   Low:    { color: '#10b981', radius:  90, fill: 0.2  },
 };
 
-export default function Map({ locations = KNUST_LOCATIONS, center = [6.6738, -1.5684], zoom = 14, height = '420px' }) {
+export default function Map({ locations = KNUST_LOCATIONS, center = [DEFAULT_LAT, DEFAULT_LNG], zoom = 14, height = '420px' }) {
   const mapRef    = useRef(null);
   const instanceRef = useRef(null);
 

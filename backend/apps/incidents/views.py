@@ -1,4 +1,5 @@
 import json
+from django.conf import settings
 from django.http import JsonResponse
 from django.views import View
 from django.views.decorators.csrf import csrf_exempt
@@ -37,8 +38,8 @@ class IncidentListView(View):
                 category=data.get('category', 'General'),
                 description=data.get('description', ''),
                 location_name=data.get('location_name', 'KNUST Campus'),
-                latitude=float(data.get('latitude', 6.6738)),
-                longitude=float(data.get('longitude', -1.5684)),
+                latitude=float(data.get('latitude', settings.CAMPUS_DEFAULT_LAT)),
+                longitude=float(data.get('longitude', settings.CAMPUS_DEFAULT_LNG)),
                 severity=data.get('severity', 'Medium'),
                 status='Pending',
                 image_url=data.get('image_url', '')

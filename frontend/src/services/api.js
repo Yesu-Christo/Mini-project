@@ -1,14 +1,21 @@
 import axios from 'axios';
 
+// ---------------------------------------------------------------------------
+// Configuration — read from environment variables (set in frontend/.env)
+// ---------------------------------------------------------------------------
+const BASE_URL    = import.meta.env.VITE_API_BASE_URL  || '/api';
+const TIMEOUT     = Number(import.meta.env.VITE_API_TIMEOUT) || 10000;
+const TOKEN_KEY   = import.meta.env.VITE_TOKEN_KEY     || 'cs_token';
+
 const api = axios.create({
-  baseURL: '/api',
-  timeout: 10000,
+  baseURL: BASE_URL,
+  timeout: TIMEOUT,
   headers: { 'Content-Type': 'application/json' },
 });
 
 // Attach token if present
 api.interceptors.request.use((config) => {
-  const token = localStorage.getItem('cs_token');
+  const token = localStorage.getItem(TOKEN_KEY);
   if (token) config.headers.Authorization = `Bearer ${token}`;
   return config;
 });

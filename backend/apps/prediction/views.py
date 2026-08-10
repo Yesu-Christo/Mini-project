@@ -1,6 +1,7 @@
 import os
 import sys
 import json
+from django.conf import settings
 from django.http import JsonResponse
 from django.views import View
 from django.views.decorators.csrf import csrf_exempt
@@ -19,7 +20,10 @@ except ImportError:
             'risk_probability': 0.78,
             'risk_level': 'High',
             'is_night': 1,
-            'coordinates': {'lat': kwargs.get('latitude', 6.6738), 'lng': kwargs.get('longitude', -1.5684)}
+            'coordinates': {
+                'lat': kwargs.get('latitude', settings.CAMPUS_DEFAULT_LAT),
+                'lng': kwargs.get('longitude', settings.CAMPUS_DEFAULT_LNG),
+            }
         }
 
 @method_decorator(csrf_exempt, name='dispatch')
@@ -30,8 +34,8 @@ class PredictRiskView(View):
             hour = int(data.get('hour', 21))
             day_of_week = int(data.get('day_of_week', 4))
             month = int(data.get('month', 8))
-            lat = float(data.get('latitude', 6.6738))
-            lng = float(data.get('longitude', -1.5684))
+            lat = float(data.get('latitude', settings.CAMPUS_DEFAULT_LAT))
+            lng = float(data.get('longitude', settings.CAMPUS_DEFAULT_LNG))
             baseline_risk = int(data.get('baseline_risk_numeric', 2))
             
             result = predict_crime_risk(
