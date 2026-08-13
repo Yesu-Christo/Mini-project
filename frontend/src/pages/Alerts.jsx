@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Bell, Send, RefreshCw, AlertTriangle, Radio, Shield } from 'lucide-react';
 import { createAlert } from '../services/api';
 import { useAppData } from '../context/AppDataContext';
+import { useAuth } from '../context/AuthContext';
 
 const TYPE_META = {
   HIGH_RISK_ZONE:     { label: 'High Risk Zone', icon: AlertTriangle, color: 'var(--red)'   },
@@ -11,6 +12,16 @@ const TYPE_META = {
 
 export default function Alerts() {
   const { alerts, loadingAll, addAlert, refreshAll } = useAppData();
+  const { user } = useAuth();
+
+  if (user?.role === 'STUDENT') {
+    return (
+      <div className="card" style={{ padding: '2rem', textAlign: 'center' }}>
+        <h2>Access Denied</h2>
+        <p>Live Alerts are restricted to Security and Admin users.</p>
+      </div>
+    );
+  }
   const [form,    setForm]    = useState({ title: '', message: '', location_name: 'Campus Wide', alert_type: 'HIGH_RISK_ZONE' });
   const [sending, setSending] = useState(false);
 

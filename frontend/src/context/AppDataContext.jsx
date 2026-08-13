@@ -54,6 +54,7 @@ export function AppDataProvider({ children }) {
   const [alerts,     setAlerts]     = useState(SEED_ALERTS);
   const [stats,      setStats]      = useState(SEED_STATS);
   const [riskZones,  setRiskZones]  = useState(SEED_RISK_ZONES);
+  const [weeklyTrends, setWeeklyTrends] = useState([]);
   const [loadingAll, setLoadingAll] = useState(true);
   const seeded = useRef(false);
 
@@ -71,6 +72,8 @@ export function AppDataProvider({ children }) {
         setStats(statsRes.value.data);
         if (statsRes.value.data.high_risk_areas)
           setRiskZones(statsRes.value.data.high_risk_areas);
+        if (statsRes.value.data.weekly_trends)
+          setWeeklyTrends(statsRes.value.data.weekly_trends);
       }
       if (incRes.status === 'fulfilled') {
         const data = incRes.value.data;
@@ -123,9 +126,12 @@ export function AppDataProvider({ children }) {
     Promise.allSettled([getDashboardStats(), getIncidents(), getAlerts()])
       .then(([statsRes, incRes, alertRes]) => {
         if (statsRes.status === 'fulfilled') {
-          setStats(statsRes.value.data);
-          if (statsRes.value.data.high_risk_areas)
-            setRiskZones(statsRes.value.data.high_risk_areas);
+          const data = statsRes.value.data;
+          setStats(data);
+          if (data.high_risk_areas)
+            setRiskZones(data.high_risk_areas);
+          if (data.weekly_trends)
+            setWeeklyTrends(data.weekly_trends);
         }
         if (incRes.status === 'fulfilled') {
           const d = incRes.value.data;
@@ -140,7 +146,7 @@ export function AppDataProvider({ children }) {
 
   return (
     <AppDataContext.Provider value={{
-      incidents, alerts, stats, riskZones,
+      incidents, alerts, stats, riskZones, weeklyTrends,
       loadingAll,
       addIncident, addAlert, refreshAll,
     }}>

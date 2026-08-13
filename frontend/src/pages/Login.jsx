@@ -1,13 +1,16 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Shield, Lock, User, Eye, EyeOff } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
 export default function Login() {
   const { login } = useAuth();
-  const [form, setForm]         = useState({ username: '', password: '' });
-  const [showPw, setShowPw]     = useState(false);
-  const [loading, setLoading]   = useState(false);
-  const [error, setError]       = useState('');
+  const navigate   = useNavigate();
+
+  const [form,    setForm]    = useState({ school_id: '', password: '' });
+  const [showPw,  setShowPw]  = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error,   setError]   = useState('');
 
   const handleChange = (e) => {
     setForm(f => ({ ...f, [e.target.name]: e.target.value }));
@@ -16,24 +19,26 @@ export default function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!form.username || !form.password) {
+    if (!form.school_id.trim() || !form.password) {
       setError('Please fill in all fields.');
       return;
     }
     setLoading(true);
     setError('');
-    const result = await login(form.username, form.password);
+    const result = await login(form.school_id.trim(), form.password);
     setLoading(false);
     if (!result.success) setError(result.error || 'Login failed.');
   };
 
+  // Quick-access sets school_id (not username)
   const quickLogin = (role) => {
     const map = {
-      admin:     { username: 'admin',     password: 'admin123'   },
-      security1: { username: 'security1', password: 'sec123'     },
-      student1:  { username: 'student1',  password: 'student123' },
+      admin:     { school_id: 'ADM001', password: 'admin123'   },
+      security1: { school_id: 'SEC001', password: 'sec123'     },
+      student1:  { school_id: 'STU001', password: 'student123' },
     };
     setForm(map[role]);
+    setError('');
   };
 
   return (
@@ -62,31 +67,35 @@ export default function Login() {
         {error && (
           <div className="alert alert-error" style={{ marginBottom: '1.25rem' }}>
             <Lock size={14} style={{ flexShrink: 0, marginTop: '1px' }} />
-            {error}
+            <span>{error}</span>
           </div>
         )}
 
         {/* Form */}
         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+
+          {/* School ID — name must match state key */}
           <div className="form-group">
-            <label className="form-label" htmlFor="username">Username</label>
+            <label className="form-label" htmlFor="school_id">School ID</label>
             <div style={{ position: 'relative' }}>
               <User size={15} style={{ position: 'absolute', left: '0.8rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
               <input
-                id="username"
-                name="username"
+                id="school_id"
+                name="school_id"
                 type="text"
                 className="form-control"
                 style={{ paddingLeft: '2.25rem' }}
-                placeholder="Enter your username"
-                value={form.username}
+                placeholder="e.g. STU001, SEC001, ADM001"
+                value={form.school_id}
                 onChange={handleChange}
                 autoComplete="username"
+                autoFocus
                 required
               />
             </div>
           </div>
 
+          {/* Password */}
           <div className="form-group">
             <label className="form-label" htmlFor="password">Password</label>
             <div style={{ position: 'relative' }}>
@@ -120,9 +129,23 @@ export default function Login() {
             style={{ marginTop: '0.25rem' }}
             disabled={loading}
           >
-            {loading ? (
-              <><div className="spinner" style={{ width: 16, height: 16, borderWidth: 2 }} /> Signing in…</>
-            ) : 'Sign In'}
+            {loading
+              ? <><div className="spinner" style={{ width: 16, height: 16, borderWidth: 2 }} /> Signing in…</>
+              : 'Sign In'
+            }
+          </button>
+
+          <button type="button" className="btn btn-ghost btn-full" onClick={() => navigate('/forgot-password')}>
+            Forgot Password?
+          </button>
+
+          <button
+            type="button"
+            className="btn btn-ghost btn-full"
+            style={{ color: 'var(--text-primary)', borderColor: 'transparent', fontWeight: 600 }}
+            onClick={() => navigate('/register')}
+          >
+            Don't have an account? <span style={{ textDecoration: 'underline' }}>Register</span>
           </button>
         </form>
 
@@ -133,9 +156,9 @@ export default function Login() {
           </p>
           <div style={{ display: 'flex', gap: '0.5rem' }}>
             {[
-              { key: 'admin',     label: 'Admin',    badge: 'badge-admin' },
+              { key: 'admin',     label: 'Admin',    badge: 'badge-admin'    },
               { key: 'security1', label: 'Security', badge: 'badge-security' },
-              { key: 'student1',  label: 'Student',  badge: 'badge-student' },
+              { key: 'student1',  label: 'Student',  badge: 'badge-student'  },
             ].map(({ key, label, badge }) => (
               <button
                 key={key}

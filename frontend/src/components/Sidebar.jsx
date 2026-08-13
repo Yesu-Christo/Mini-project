@@ -12,8 +12,8 @@ const navItems = [
   { to: '/incidents',  label: 'Incident History', icon: ClipboardList },
   { to: '/prediction', label: 'AI Predictions',   icon: BrainCircuit },
   { to: '/heatmap',    label: 'Crime Heatmap',    icon: Map },
-  { to: '/alerts',     label: 'Live Alerts',      icon: Bell },
 ];
+const alertItem = { to: '/alerts', label: 'Live Alerts', icon: Bell };
 
 const adminItems = [
   { to: '/users',    label: 'User Management', icon: Users },
@@ -70,7 +70,7 @@ export default function Sidebar({ isOpen, onClose }) {
 
       {/* Navigation */}
       <nav className="sidebar-nav">
-        <NavGroup title="Main"    items={navItems} />
+        <NavGroup title="Main" items={[...navItems, ...(user?.role !== 'STUDENT' ? [alertItem] : [])]} />
         {user?.role === 'ADMIN' && <NavGroup title="Admin" items={adminItems} />}
         <NavGroup title="Account" items={accountItems} />
       </nav>

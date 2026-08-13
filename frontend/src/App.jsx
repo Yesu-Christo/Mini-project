@@ -5,6 +5,9 @@ import AppLayout from './layouts/AppLayout';
 
 // Pages
 import Login          from './pages/Login';
+import Register       from './pages/Register';
+import ForgotPassword from './pages/ForgotPassword';
+import ResetPassword  from './pages/ResetPassword';
 import Dashboard      from './pages/Dashboard';
 import ReportIncident from './pages/ReportIncident';
 import IncidentHistory from './pages/IncidentHistory';
@@ -29,6 +32,18 @@ export default function App() {
       <Route
         path="/login"
         element={isAuthenticated ? <Navigate to="/" replace /> : <Login />}
+      />
+      <Route
+        path="/register"
+        element={isAuthenticated ? <Navigate to="/" replace /> : <Register />}
+      />
+      <Route
+        path="/forgot-password"
+        element={<ForgotPassword />}
+      />
+      <Route
+        path="/reset-password"
+        element={<ResetPassword />}
       />
       <Route
         path="/"

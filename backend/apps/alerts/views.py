@@ -3,10 +3,12 @@ from django.http import JsonResponse
 from django.views import View
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
+from apps.core.decorators import require_auth, require_role
 from .models import Alert
 
 @method_decorator(csrf_exempt, name='dispatch')
 class AlertListView(View):
+    @method_decorator(require_role('ADMIN', 'SECURITY'))
     def get(self, request):
         alerts = Alert.objects.filter(is_active=True).order_by('-created_at')
         data = [{
@@ -19,6 +21,7 @@ class AlertListView(View):
         } for a in alerts]
         return JsonResponse({'alerts': data}, status=200)
 
+    @method_decorator(require_role('ADMIN', 'SECURITY'))
     def post(self, request):
         try:
             data = json.loads(request.body)

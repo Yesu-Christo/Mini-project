@@ -20,9 +20,9 @@ export function AuthProvider({ children }) {
     }
   });
 
-  const login = useCallback(async (username, password) => {
+  const login = useCallback(async (school_id, password) => {
     try {
-      const res = await apiLogin({ username, password });
+      const res = await apiLogin({ school_id, password });
       const { token, user: userData } = res.data;
       localStorage.setItem(TOKEN_KEY, token);
       localStorage.setItem(USER_KEY, JSON.stringify(userData));
@@ -31,13 +31,13 @@ export function AuthProvider({ children }) {
     } catch (err) {
       // Graceful fallback for demo if backend is not running
       const mockUsers = {
-        admin:     { id: 1, username: 'admin',     email: `admin@${DEMO_EMAIL_DOMAIN}`,    role: 'ADMIN' },
-        security1: { id: 2, username: 'security1', email: `sec@${DEMO_EMAIL_DOMAIN}`,      role: 'SECURITY' },
-        student1:  { id: 3, username: 'student1',  email: `student1@${DEMO_EMAIL_DOMAIN}`, role: 'STUDENT' },
+        STU001: { id: 3, username: 'student1', email: `student1@${DEMO_EMAIL_DOMAIN}`, role: 'STUDENT', school_id: 'STU001' },
+        SEC001: { id: 2, username: 'security1', email: `sec1@${DEMO_EMAIL_DOMAIN}`, role: 'SECURITY', school_id: 'SEC001' },
+        ADM001: { id: 1, username: 'admin',    email: `admin@${DEMO_EMAIL_DOMAIN}`,    role: 'ADMIN',    school_id: 'ADM001' },
       };
-      if (mockUsers[username] && password) {
-        const userData = mockUsers[username];
-        localStorage.setItem(TOKEN_KEY, `demo-token-${username}`);
+      if (mockUsers[school_id] && password) {
+        const userData = mockUsers[school_id];
+        localStorage.setItem(TOKEN_KEY, `demo-token-${school_id}`);
         localStorage.setItem(USER_KEY, JSON.stringify(userData));
         setUser(userData);
         return { success: true, demo: true };

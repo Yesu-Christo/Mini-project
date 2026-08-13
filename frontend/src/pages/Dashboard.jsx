@@ -6,7 +6,7 @@ import Map from '../components/Map';
 import Table from '../components/Table';
 import { useAppData } from '../context/AppDataContext';
 
-const weeklyData = [
+const fallbackWeeklyData = [
   { day: 'Mon', incidents: 12 },
   { day: 'Tue', incidents: 18 },
   { day: 'Wed', incidents: 9  },
@@ -27,7 +27,7 @@ const CustomTooltip = ({ active, payload, label }) => {
 };
 
 export default function Dashboard() {
-  const { stats, riskZones, loadingAll, refreshAll } = useAppData();
+  const { stats, weeklyTrends, riskZones, loadingAll, refreshAll } = useAppData();
 
   return (
     <div>
@@ -103,7 +103,7 @@ export default function Dashboard() {
           <p className="card-title">Weekly Incident Trends</p>
           <p className="card-subtitle" style={{ marginBottom: '1.25rem' }}>KNUST campus — current week</p>
           <ResponsiveContainer width="100%" height={260}>
-            <BarChart data={weeklyData} barSize={26}>
+            <BarChart data={weeklyTrends?.length ? weeklyTrends : (stats.weekly_trends?.length ? stats.weekly_trends : fallbackWeeklyData)} barSize={26}>
               <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" vertical={false} />
               <XAxis dataKey="day" tick={{ fill: 'var(--text-secondary)', fontSize: 12 }} axisLine={false} tickLine={false} />
               <YAxis tick={{ fill: 'var(--text-secondary)', fontSize: 12 }} axisLine={false} tickLine={false} />

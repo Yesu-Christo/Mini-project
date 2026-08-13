@@ -3,10 +3,10 @@ from django.contrib.auth.models import User
 
 class Incident(models.Model):
     STATUS_CHOICES = (
-        ('Pending', 'Pending'),
-        ('Under Investigation', 'Under Investigation'),
+        ('Reported', 'Reported'),
+        ('Investigation Ongoing', 'Investigation Ongoing'),
         ('Resolved', 'Resolved'),
-        ('Dismissed', 'Dismissed'),
+        ('False Alarm', 'False Alarm'),
     )
     SEVERITY_CHOICES = (
         ('Low', 'Low'),

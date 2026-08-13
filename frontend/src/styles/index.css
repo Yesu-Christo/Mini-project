@@ -630,6 +630,57 @@ select.form-control { cursor: pointer; appearance: none; background-image: url("
   box-shadow: 0 8px 24px var(--blue-glow);
 }
 
+.role-selection-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+  margin-bottom: 1.25rem;
+}
+.role-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem 0.4rem;
+  border-radius: var(--r-md);
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
+  text-align: center;
+}
+.role-card:hover {
+  border-color: var(--border-md);
+  background: rgba(255, 255, 255, 0.04);
+}
+.role-card.active {
+  border-color: #FDB913;
+  background: rgba(253, 185, 19, 0.1);
+  color: #FDB913;
+  box-shadow: 0 0 12px rgba(253, 185, 19, 0.2);
+}
+.role-card-icon {
+  margin-bottom: 0.35rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.role-card-title {
+  font-size: 0.75rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+.role-card-desc {
+  font-size: 0.65rem;
+  color: var(--text-muted);
+  margin-top: 0.15rem;
+}
+.role-card.active .role-card-desc {
+  color: rgba(253, 185, 19, 0.85);
+}
+
 /* =============================================
    Risk Gauge (Prediction Page)
    ============================================= */

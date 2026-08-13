@@ -1,33 +1,55 @@
 import json
-from django.http import JsonResponse
-from django.views import View
+import re
+import uuid
+from django.conf import settings
 from django.contrib.auth.models import User
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate
+from django.core.mail import send_mail
+from django.http import JsonResponse
+from django.utils import timezone
+from django.views import View
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
-from .models import UserProfile
+from .models import PasswordResetToken, UserProfile
+
+ROLE_PREFIXES = {
+    'STU': 'STUDENT',
+    'SEC': 'SECURITY',
+    'ADM': 'ADMIN',
+    'IT': 'IT',
+}
 
 @method_decorator(csrf_exempt, name='dispatch')
 class LoginView(View):
     def post(self, request):
         try:
             data = json.loads(request.body)
-            username = data.get('username')
-            password = data.get('password')
-            user = authenticate(username=username, password=password)
-            if user:
-                role = getattr(user.profile, 'role', 'STUDENT') if hasattr(user, 'profile') else 'STUDENT'
-                return JsonResponse({
-                    'message': 'Login successful',
-                    'token': f'mock-jwt-token-for-{user.username}',
-                    'user': {
-                        'id': user.id,
-                        'username': user.username,
-                        'email': user.email,
-                        'role': role
-                    }
-                }, status=200)
-            return JsonResponse({'error': 'Invalid credentials'}, status=401)
+            school_id = data.get('school_id', '').strip().upper()
+            password = data.get('password', '')
+
+            if not school_id or not password:
+                return JsonResponse({'error': 'School ID and password are required.'}, status=400)
+
+            try:
+                profile = UserProfile.objects.select_related('user').get(school_id=school_id)
+            except UserProfile.DoesNotExist:
+                return JsonResponse({'error': 'School ID not found.'}, status=403)
+
+            user = authenticate(username=profile.user.username, password=password)
+            if not user or not user.is_active:
+                return JsonResponse({'error': 'Invalid credentials.'}, status=401)
+
+            return JsonResponse({
+                'message': 'Login successful',
+                'token': profile.school_id,
+                'user': {
+                    'id': profile.user.id,
+                    'username': profile.user.username,
+                    'email': profile.user.email,
+                    'role': profile.role,
+                    'school_id': profile.school_id,
+                }
+            }, status=200)
         except Exception as e:
             return JsonResponse({'error': str(e)}, status=400)
 
@@ -36,16 +58,115 @@ class RegisterView(View):
     def post(self, request):
         try:
             data = json.loads(request.body)
-            username = data.get('username')
-            password = data.get('password')
-            email = data.get('email', '')
-            role = data.get('role', 'STUDENT')
-            
+            school_id = data.get('school_id', '').strip().upper()
+            password = data.get('password', '')
+            email = data.get('email', '').strip()
+            requested_role = data.get('role', '').strip().upper()
+            department = data.get('department', '').strip()
+
+            id_label = 'Student ID' if requested_role == 'STUDENT' else ('Staff ID' if requested_role in ['SECURITY', 'ADMIN'] else 'ID')
+
+            if not school_id:
+                return JsonResponse({'error': f'{id_label} is required.'}, status=400)
+
+            if not email:
+                return JsonResponse({'error': 'Email address is required.'}, status=400)
+
+            if not password:
+                return JsonResponse({'error': 'Password is required.'}, status=400)
+
+            valid_roles = {'STUDENT': 'STUDENT', 'SECURITY': 'SECURITY', 'ADMIN': 'ADMIN', 'IT': 'IT'}
+            if requested_role in valid_roles:
+                role = valid_roles[requested_role]
+            else:
+                role_prefix = school_id[:3]
+                role = ROLE_PREFIXES.get(role_prefix, 'STUDENT')
+
+            if role == 'ADMIN' and not department:
+                return JsonResponse({'error': 'Department is required for Admin registration.'}, status=400)
+
+            if not re.match(r'^[A-Z0-9_-]{3,20}$', school_id):
+                return JsonResponse({'error': f'Invalid {id_label} format.'}, status=400)
+
+            if UserProfile.objects.filter(school_id=school_id).exists():
+                return JsonResponse({'error': f'{id_label} is already registered.'}, status=400)
+
+            username = school_id.lower()
             if User.objects.filter(username=username).exists():
-                return JsonResponse({'error': 'Username already taken'}, status=400)
-                
+                username = f"{username}_{User.objects.count() + 1}"
+
             user = User.objects.create_user(username=username, password=password, email=email)
-            UserProfile.objects.create(user=user, role=role)
-            return JsonResponse({'message': 'Registration successful'}, status=201)
+            UserProfile.objects.create(
+                user=user,
+                school_id=school_id,
+                role=role,
+                hall_or_department=department if role == 'ADMIN' and department else None
+            )
+
+            return JsonResponse({'message': 'Registration successful', 'role': role}, status=201)
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=400)
+
+@method_decorator(csrf_exempt, name='dispatch')
+class ForgotPasswordView(View):
+    def post(self, request):
+        try:
+            data = json.loads(request.body)
+            school_id = data.get('school_id', '').strip().upper()
+            if not school_id:
+                return JsonResponse({'error': 'School ID is required.'}, status=400)
+
+            try:
+                profile = UserProfile.objects.select_related('user').get(school_id=school_id)
+            except UserProfile.DoesNotExist:
+                return JsonResponse({'error': 'School ID not found.'}, status=404)
+
+            reset_token = uuid.uuid4().hex
+            expires_at = timezone.now() + timezone.timedelta(hours=2)
+            PasswordResetToken.objects.create(
+                user_profile=profile,
+                token=reset_token,
+                expires_at=expires_at,
+            )
+
+            reset_link = f"{settings.FRONTEND_URL}/reset-password?token={reset_token}"
+            send_mail(
+                'CampusShield Password Reset',
+                f'Use the following link to reset your password: {reset_link}\n\nThis link expires in 2 hours.',
+                settings.DEFAULT_FROM_EMAIL,
+                [profile.user.email],
+                fail_silently=True,
+            )
+            return JsonResponse({'message': 'Password reset instructions sent.'}, status=200)
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=400)
+
+@method_decorator(csrf_exempt, name='dispatch')
+class ResetPasswordView(View):
+    def post(self, request):
+        try:
+            data = json.loads(request.body)
+            token = data.get('token', '').strip()
+            password = data.get('password', '')
+
+            if not token or not password:
+                return JsonResponse({'error': 'Reset token and new password are required.'}, status=400)
+
+            try:
+                reset_record = PasswordResetToken.objects.select_related('user_profile').get(
+                    token=token,
+                    used=False,
+                    expires_at__gte=timezone.now(),
+                )
+            except PasswordResetToken.DoesNotExist:
+                return JsonResponse({'error': 'Invalid or expired reset token.'}, status=400)
+
+            user = reset_record.user_profile.user
+            user.set_password(password)
+            user.save()
+            reset_record.used = True
+            reset_record.save()
+
+            return JsonResponse({'message': 'Password has been reset successfully.'}, status=200)
         except Exception as e:
             return JsonResponse({'error': str(e)}, status=400)

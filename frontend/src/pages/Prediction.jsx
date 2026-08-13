@@ -61,12 +61,12 @@ export default function Prediction() {
     setLoading(true);
     try {
       const res = await runPrediction({
+        location_name:         selectedLoc.label,
         hour:                  params.hour,
         day_of_week:           params.day_of_week,
         month:                 params.month,
         latitude:              selectedLoc.lat,
         longitude:             selectedLoc.lng,
-        baseline_risk_numeric: selectedLoc.baseline,
       });
       setResult({ ...res.data.prediction, location_name: selectedLoc.label });
     } catch {

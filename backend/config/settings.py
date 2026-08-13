@@ -1,32 +1,21 @@
-# Django settings for CampusShield-AI project.
 import os
 from pathlib import Path
 from dotenv import load_dotenv
 
-# ---------------------------------------------------------------------------
-# Load environment variables from backend/.env (ignored by git).
-# Variables already set in the OS environment take precedence.
-# ---------------------------------------------------------------------------
 BASE_DIR = Path(__file__).resolve().parent.parent
 load_dotenv(BASE_DIR / '.env')
 
-# ---------------------------------------------------------------------------
-# Security — NEVER hardcode these values
-# ---------------------------------------------------------------------------
+# ── Security ──────────────────────────────────────────────────────────────
 SECRET_KEY = os.environ.get(
     'SECRET_KEY',
     'django-insecure-fallback-key-replace-in-production',
 )
-
 DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 
-# Accepts a comma-separated list: "localhost,127.0.0.1,myapp.com"
-_ALLOWED_HOSTS_ENV = os.environ.get('ALLOWED_HOSTS', 'localhost,127.0.0.1')
-ALLOWED_HOSTS = [h.strip() for h in _ALLOWED_HOSTS_ENV.split(',') if h.strip()]
+_ALLOWED = os.environ.get('ALLOWED_HOSTS', 'localhost,127.0.0.1')
+ALLOWED_HOSTS = [h.strip() for h in _ALLOWED.split(',') if h.strip()]
 
-# ---------------------------------------------------------------------------
-# Installed apps
-# ---------------------------------------------------------------------------
+# ── Installed Apps ────────────────────────────────────────────────────────
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -34,21 +23,16 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
-    # Third party
     'corsheaders',
-
-    # Internal apps
     'apps.accounts',
     'apps.incidents',
     'apps.prediction',
     'apps.alerts',
     'apps.dashboard',
+    'apps.core',
 ]
 
-# ---------------------------------------------------------------------------
-# Middleware
-# ---------------------------------------------------------------------------
+# ── Middleware ────────────────────────────────────────────────────────────
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
@@ -56,24 +40,20 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'apps.core.middleware.TokenAuthMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-# ---------------------------------------------------------------------------
-# CORS — restrict to allowed origins from env; fall back to open in dev only
-# ---------------------------------------------------------------------------
-_CORS_ORIGINS_ENV = os.environ.get('CORS_ALLOWED_ORIGINS', '')
-if _CORS_ORIGINS_ENV:
+# ── CORS ──────────────────────────────────────────────────────────────────
+_CORS_ORIGINS = os.environ.get('CORS_ALLOWED_ORIGINS', '')
+if _CORS_ORIGINS:
     CORS_ALLOW_ALL_ORIGINS = False
-    CORS_ALLOWED_ORIGINS = [o.strip() for o in _CORS_ORIGINS_ENV.split(',') if o.strip()]
+    CORS_ALLOWED_ORIGINS = [o.strip() for o in _CORS_ORIGINS.split(',') if o.strip()]
 else:
-    # Fallback: open for local development (set CORS_ALLOWED_ORIGINS in .env for production)
     CORS_ALLOW_ALL_ORIGINS = True
 
-# ---------------------------------------------------------------------------
-# URLs / Templates / WSGI
-# ---------------------------------------------------------------------------
+# ── URLs / Templates / WSGI ───────────────────────────────────────────────
 ROOT_URLCONF = 'config.urls'
 
 TEMPLATES = [
@@ -94,9 +74,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
-# ---------------------------------------------------------------------------
-# Database — defaults to SQLite for development
-# ---------------------------------------------------------------------------
+# ── Database ──────────────────────────────────────────────────────────────
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -104,36 +82,46 @@ DATABASES = {
     }
 }
 
-# ---------------------------------------------------------------------------
-# Password validation
-# ---------------------------------------------------------------------------
+# ── Password Hashers ──────────────────────────────────────────────────────
+# BCryptSHA256 is preferred — requires: pip install bcrypt
+# Falls back gracefully to PBKDF2 if bcrypt is not installed.
+PASSWORD_HASHERS = [
+    'django.contrib.auth.hashers.BCryptSHA256PasswordHasher',
+    'django.contrib.auth.hashers.PBKDF2PasswordHasher',
+]
+
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
     {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
 ]
 
-# ---------------------------------------------------------------------------
-# Localisation
-# ---------------------------------------------------------------------------
+# ── Localisation ──────────────────────────────────────────────────────────
 LANGUAGE_CODE = 'en-us'
-TIME_ZONE = os.environ.get('TIME_ZONE', 'UTC')
+TIME_ZONE = os.environ.get('TIME_ZONE', 'Africa/Accra')
 USE_I18N = True
 USE_TZ = True
 
-# ---------------------------------------------------------------------------
-# Static & media files
-# ---------------------------------------------------------------------------
-STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+# ── Email ─────────────────────────────────────────────────────────────────
+# For local dev with no .env set, use console backend so emails print to terminal.
+# Set EMAIL_BACKEND=django.core.mail.backends.smtp.EmailBackend in .env for real emails.
+EMAIL_BACKEND     = os.environ.get('EMAIL_BACKEND', 'django.core.mail.backends.console.EmailBackend')
+EMAIL_HOST        = os.environ.get('EMAIL_HOST', 'smtp.gmail.com')
+EMAIL_PORT        = int(os.environ.get('EMAIL_PORT', '587'))
+EMAIL_HOST_USER   = os.environ.get('EMAIL_HOST_USER', '')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', '')
+EMAIL_USE_TLS     = os.environ.get('EMAIL_USE_TLS', 'True') == 'True'
+EMAIL_USE_SSL     = os.environ.get('EMAIL_USE_SSL', 'False') == 'True'
+DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL', 'CampusShield AI <noreply@campusshield.local>')
+FRONTEND_URL      = os.environ.get('FRONTEND_URL', 'http://localhost:5173')
 
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+# ── Static & Media ────────────────────────────────────────────────────────
+STATIC_URL  = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+MEDIA_URL   = '/media/'
+MEDIA_ROOT  = os.path.join(BASE_DIR, 'media')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# ---------------------------------------------------------------------------
-# Campus-specific configuration (loaded from .env)
-# These are used as fallback defaults for incident reports and predictions.
-# ---------------------------------------------------------------------------
+# ── Campus Defaults ───────────────────────────────────────────────────────
 CAMPUS_DEFAULT_LAT = float(os.environ.get('CAMPUS_DEFAULT_LAT', '6.6738'))
 CAMPUS_DEFAULT_LNG = float(os.environ.get('CAMPUS_DEFAULT_LNG', '-1.5684'))

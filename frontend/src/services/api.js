@@ -21,8 +21,10 @@ api.interceptors.request.use((config) => {
 });
 
 // Auth
-export const login    = (data) => api.post('/accounts/login/', data);
-export const register = (data) => api.post('/accounts/register/', data);
+export const login          = (data) => api.post('/accounts/login/', data);
+export const register       = (data) => api.post('/accounts/register/', data);
+export const forgotPassword = (data) => api.post('/accounts/forgot-password/', data);
+export const resetPassword  = (data) => api.post('/accounts/reset-password/', data);
 
 // Incidents
 export const getIncidents    = ()     => api.get('/incidents/');
