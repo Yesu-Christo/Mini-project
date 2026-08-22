@@ -14,6 +14,8 @@ import {
   getDashboardStats,
   getIncidents,
   getAlerts,
+  getNotifications,
+  updateIncidentStatus,
 } from '../services/api';
 
 // ─── Seed data (shown when backend is offline) ────────────────────────────
@@ -52,6 +54,7 @@ const AppDataContext = createContext(null);
 export function AppDataProvider({ children }) {
   const [incidents,  setIncidents]  = useState(SEED_INCIDENTS);
   const [alerts,     setAlerts]     = useState(SEED_ALERTS);
+  const [notifications, setNotifications] = useState([]);
   const [stats,      setStats]      = useState(SEED_STATS);
   const [riskZones,  setRiskZones]  = useState(SEED_RISK_ZONES);
   const [weeklyTrends, setWeeklyTrends] = useState([]);
@@ -67,7 +70,8 @@ export function AppDataProvider({ children }) {
       getDashboardStats(),
       getIncidents(),
       getAlerts(),
-    ]).then(([statsRes, incRes, alertRes]) => {
+      getNotifications(),
+    ]).then(([statsRes, incRes, alertRes, notificationRes]) => {
       if (statsRes.status === 'fulfilled') {
         setStats(statsRes.value.data);
         if (statsRes.value.data.high_risk_areas)
@@ -83,25 +87,29 @@ export function AppDataProvider({ children }) {
         const data = alertRes.value.data;
         setAlerts(data.alerts || data);
       }
+      if (notificationRes.status === 'fulfilled') {
+        const data = notificationRes.value.data;
+        setNotifications(data.notifications || data);
+      }
     }).finally(() => setLoadingAll(false));
   }, []);
 
   // ── addIncident — called by ReportIncident on success ─────────────────
   const addIncident = useCallback((newIncident) => {
-    setIncidents(prev => [newIncident, ...prev]);
+    const normalized = {
+      ...newIncident,
+      incident_id: newIncident.incident_id || newIncident.id || `INC${Date.now()}`,
+      status: newIncident.status === 'Pending' ? 'Reported' : (newIncident.status || 'Reported'),
+      created_at: newIncident.created_at || new Date().toISOString().slice(0, 16).replace('T', ' '),
+      description: newIncident.description || 'No description provided.',
+    };
 
-    // update all affected stats immediately
+    setIncidents(prev => [normalized, ...prev]);
+
     setStats(prev => {
       const now     = new Date();
       const today   = now.toISOString().slice(0, 10);
-      const isToday = newIncident.created_at?.startsWith(today);
-
-      // bump risk zone incident count if location matches
-      setRiskZones(zones => zones.map(z =>
-        newIncident.location_name?.toLowerCase().includes(z.name.split(' ')[0].toLowerCase())
-          ? { ...z, incidents: z.incidents + 1 }
-          : z
-      ));
+      const isToday = normalized.created_at?.startsWith(today);
 
       return {
         ...prev,
@@ -123,8 +131,8 @@ export function AppDataProvider({ children }) {
   // ── refreshAll — manual hard reload ───────────────────────────────────
   const refreshAll = useCallback(() => {
     setLoadingAll(true);
-    Promise.allSettled([getDashboardStats(), getIncidents(), getAlerts()])
-      .then(([statsRes, incRes, alertRes]) => {
+    Promise.allSettled([getDashboardStats(), getIncidents(), getAlerts(), getNotifications()])
+      .then(([statsRes, incRes, alertRes, notificationRes]) => {
         if (statsRes.status === 'fulfilled') {
           const data = statsRes.value.data;
           setStats(data);
@@ -141,14 +149,33 @@ export function AppDataProvider({ children }) {
           const d = alertRes.value.data;
           setAlerts(d.alerts || d);
         }
+        if (notificationRes.status === 'fulfilled') {
+          const d = notificationRes.value.data;
+          setNotifications(d.notifications || d);
+        }
       }).finally(() => setLoadingAll(false));
+  }, []);
+
+  const updateIncidentStatusById = useCallback(async (incidentId, nextStatus) => {
+    try {
+      const response = await updateIncidentStatus(incidentId, nextStatus);
+      const updatedStatus = response?.data?.status || nextStatus;
+      setIncidents(prev => prev.map(item => (
+        item.incident_id === incidentId || item.id === incidentId
+          ? { ...item, status: updatedStatus }
+          : item
+      )));
+      return { success: true, status: updatedStatus };
+    } catch (error) {
+      return { success: false, error: error?.response?.data?.error || 'Unable to update status.' };
+    }
   }, []);
 
   return (
     <AppDataContext.Provider value={{
-      incidents, alerts, stats, riskZones, weeklyTrends,
+      incidents, alerts, notifications, stats, riskZones, weeklyTrends,
       loadingAll,
-      addIncident, addAlert, refreshAll,
+      addIncident, addAlert, refreshAll, updateIncidentStatus: updateIncidentStatusById,
     }}>
       {children}
     </AppDataContext.Provider>

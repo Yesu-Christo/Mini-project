@@ -27,8 +27,9 @@ export const forgotPassword = (data) => api.post('/accounts/forgot-password/', d
 export const resetPassword  = (data) => api.post('/accounts/reset-password/', data);
 
 // Incidents
-export const getIncidents    = ()     => api.get('/incidents/');
-export const createIncident  = (data) => api.post('/incidents/', data);
+export const getIncidents          = ()     => api.get('/incidents/');
+export const createIncident        = (data) => api.post('/incidents/', data);
+export const updateIncidentStatus  = (incidentId, status) => api.patch(`/incidents/${incidentId}/`, { status });
 
 // Prediction
 export const runPrediction   = (data) => api.post('/prediction/', data);
@@ -36,6 +37,7 @@ export const runPrediction   = (data) => api.post('/prediction/', data);
 // Alerts
 export const getAlerts       = ()     => api.get('/alerts/');
 export const createAlert     = (data) => api.post('/alerts/', data);
+export const getNotifications = ()     => api.get('/alerts/notifications/');
 
 // Dashboard
 export const getDashboardStats = () => api.get('/dashboard/stats/');

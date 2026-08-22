@@ -1,22 +1,38 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Table from '../components/Table';
 import { RefreshCw } from 'lucide-react';
 import { useAppData } from '../context/AppDataContext';
+import { useAuth } from '../context/AuthContext';
 
-const FILTERS = ['All', 'Pending', 'Under Investigation', 'Resolved'];
+const FILTERS = ['All', 'Reported', 'Under Review', 'Verified', 'Resolved', 'Dismissed'];
 const statusClass = {
-  Resolved:              'badge-resolved',
-  Pending:               'badge-pending',
+  Reported: 'badge-pending',
+  'Under Review': 'badge-active',
+  Verified: 'badge-admin',
+  Resolved: 'badge-resolved',
+  Dismissed: 'badge-student',
+  Pending: 'badge-pending',
   'Under Investigation': 'badge-active',
+  'False Alarm': 'badge-student',
 };
 
 export default function IncidentHistory() {
   const { incidents, loadingAll, refreshAll } = useAppData();
+  const { user } = useAuth();
+  const navigate = useNavigate();
   const [filter, setFilter] = useState('All');
 
   const filtered = filter === 'All'
     ? incidents
     : incidents.filter(i => i.status === filter);
+
+  const orderedIncidents = [...filtered].sort((left, right) => {
+    const leftOwn = String(left.reporter_id) === String(user?.id);
+    const rightOwn = String(right.reporter_id) === String(user?.id);
+    if (leftOwn !== rightOwn) return leftOwn ? -1 : 1;
+    return String(right.created_at || '').localeCompare(String(left.created_at || ''));
+  });
 
   return (
     <div>
@@ -47,14 +63,23 @@ export default function IncidentHistory() {
       <div className="card">
         <Table
           headers={['ID', 'Category', 'Location', 'Severity', 'Status', 'Reported']}
-          data={filtered}
+          data={orderedIncidents}
           loading={loadingAll}
           renderRow={(inc, i) => (
-            <tr key={i}>
+            <tr
+              key={i}
+              onClick={() => navigate(`/incidents/${inc.incident_id || inc.id}`)}
+              style={{ cursor: 'pointer' }}
+            >
               <td style={{ fontWeight: 700, color: 'var(--blue)', fontSize: '0.82rem' }}>
                 {inc.incident_id || inc.id}
               </td>
-              <td style={{ fontWeight: 500 }}>{inc.category}</td>
+              <td style={{ fontWeight: 500 }}>
+                {inc.category}
+                {String(inc.reporter_id) === String(user?.id) && (
+                  <span className="badge badge-active" style={{ marginLeft: '0.45rem' }}>My report</span>
+                )}
+              </td>
               <td style={{ color: 'var(--text-secondary)' }}>{inc.location_name}</td>
               <td>
                 <span className={`badge badge-${(inc.severity || 'medium').toLowerCase()}`}>

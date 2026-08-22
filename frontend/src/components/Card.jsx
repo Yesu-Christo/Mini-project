@@ -5,9 +5,24 @@ import React from 'react';
  * Card     — generic card container
  */
 
-export function StatCard({ label, value, icon: Icon, iconClass = 'blue', meta, trend }) {
+export function StatCard({ label, value, icon: Icon, iconClass = 'blue', meta, trend, onClick }) {
+  const handleKeyDown = (e) => {
+    if (!onClick) return;
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      onClick();
+    }
+  };
+
   return (
-    <div className="stat-card">
+    <div
+      className="stat-card"
+      onClick={onClick}
+      style={onClick ? { cursor: 'pointer' } : undefined}
+      role={onClick ? 'button' : undefined}
+      tabIndex={onClick ? 0 : undefined}
+      onKeyDown={handleKeyDown}
+    >
       <div className={`stat-icon stat-icon-${iconClass}`}>
         {Icon && <Icon size={20} />}
       </div>

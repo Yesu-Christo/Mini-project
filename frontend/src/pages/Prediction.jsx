@@ -195,6 +195,33 @@ export default function Prediction() {
           )}
         </div>
       </div>
+
+      <div className="card" style={{ marginTop: '1.5rem' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.75rem' }}>
+          <BrainCircuit size={16} color="var(--blue)" />
+          <p className="card-title" style={{ marginBottom: 0 }}>How Predictions Work</p>
+        </div>
+        <p style={{ color: 'var(--text-secondary)', lineHeight: 1.6, fontSize: '0.88rem', marginBottom: '1rem' }}>
+          CampusShield analyzes submitted incident reports, weighting severity and recency so every prediction traces back to reports entered by users.
+        </p>
+        <div className="form-grid-2">
+          <div>
+            <strong>Risk score</strong>
+            <p style={{ color: 'var(--text-secondary)', lineHeight: 1.5, fontSize: '0.84rem' }}>
+              Each zone sums severity weights for its incidents, discounted by age so recent events count more.
+            </p>
+          </div>
+          <div>
+            <strong>Rising activity</strong>
+            <p style={{ color: 'var(--text-secondary)', lineHeight: 1.5, fontSize: '0.84rem' }}>
+              Incident counts from the last 30 days are compared with the prior 30 days. A higher recent count provides an early warning.
+            </p>
+          </div>
+        </div>
+        <p style={{ color: 'var(--text-secondary)', lineHeight: 1.5, fontSize: '0.84rem', marginTop: '0.75rem' }}>
+          Weekly trends are obtained by grouping those submitted reports by the day they were recorded.
+        </p>
+      </div>
     </div>
   );
 }

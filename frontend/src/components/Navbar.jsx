@@ -1,7 +1,8 @@
 import React from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Menu, Bell } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import { useAppData } from '../context/AppDataContext';
 
 const routeTitles = {
   '/':           'Real-Time Security Dashboard',
@@ -10,6 +11,7 @@ const routeTitles = {
   '/prediction': 'AI Crime Risk Prediction',
   '/heatmap':    'GIS Campus Crime Heatmap',
   '/alerts':     'Live Emergency Alerts',
+  '/notifications': 'Notifications',
   '/users':      'User Management',
   '/profile':    'My Profile',
   '/settings':   'System Settings',
@@ -17,8 +19,11 @@ const routeTitles = {
 
 export default function Navbar({ onMenuToggle }) {
   const { user } = useAuth();
+  const { notifications } = useAppData();
   const location = useLocation();
+  const navigate = useNavigate();
   const title = routeTitles[location.pathname] || 'CampusShield AI';
+  const unreadNotificationCount = notifications.filter(item => !item.is_read).length;
 
   return (
     <header className="navbar">
@@ -43,8 +48,26 @@ export default function Navbar({ onMenuToggle }) {
       <div className="navbar-right">
         <span className="status-dot">System Active</span>
 
-        <button className="btn btn-icon btn-ghost" aria-label="Notifications">
+        <button
+          className="btn btn-icon btn-ghost"
+          onClick={() => navigate('/notifications')}
+          aria-label={`Notifications${unreadNotificationCount ? `, ${unreadNotificationCount} unread` : ''}`}
+          title="Open notifications"
+          style={{ position: 'relative' }}
+        >
           <Bell size={16} />
+          {unreadNotificationCount > 0 && (
+            <span
+              aria-hidden="true"
+              style={{
+                position: 'absolute', top: 2, right: 2, minWidth: 15, height: 15,
+                padding: '0 3px', borderRadius: 999, background: 'var(--red)',
+                color: '#fff', fontSize: '0.6rem', fontWeight: 800, lineHeight: '15px',
+              }}
+            >
+              {unreadNotificationCount > 99 ? '99+' : unreadNotificationCount}
+            </span>
+          )}
         </button>
 
         <div className="user-chip">

@@ -12,8 +12,10 @@ import Dashboard      from './pages/Dashboard';
 import ReportIncident from './pages/ReportIncident';
 import IncidentHistory from './pages/IncidentHistory';
 import Prediction     from './pages/Prediction';
+import IncidentDetail from './pages/IncidentDetail';
 import HeatMap        from './pages/HeatMap';
 import Alerts         from './pages/Alerts';
+import Notifications  from './pages/Notifications';
 import Users          from './pages/Users';
 import Profile        from './pages/Profile';
 import Settings       from './pages/Settings';
@@ -56,9 +58,11 @@ export default function App() {
         <Route index             element={<Dashboard />} />
         <Route path="report"     element={<ReportIncident />} />
         <Route path="incidents"  element={<IncidentHistory />} />
+        <Route path="incidents/:incidentId" element={<IncidentDetail />} />
         <Route path="prediction" element={<Prediction />} />
         <Route path="heatmap"    element={<HeatMap />} />
         <Route path="alerts"     element={<Alerts />} />
+        <Route path="notifications" element={<Notifications />} />
         <Route path="users"      element={<Users />} />
         <Route path="profile"    element={<Profile />} />
         <Route path="settings"   element={<Settings />} />

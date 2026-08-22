@@ -7,19 +7,26 @@ from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 from django.utils import timezone
 from django.contrib.auth import get_user_model
+from django.db import models
 from .models import Incident
 from apps.core.decorators import require_auth, require_role
-from apps.alerts.models import Alert
+from apps.alerts.models import Alert, Notification
 from apps.accounts.models import UserProfile
 
 User = get_user_model()
 
-STATUS_CHOICES = ['Reported', 'Investigation Ongoing', 'Resolved', 'False Alarm']
+STATUS_CHOICES = ['Reported', 'Under Review', 'Verified', 'Resolved', 'Dismissed']
+LEGACY_STATUS_MAP = {
+    'Pending': 'Reported',
+    'Under Investigation': 'Under Review',
+    'Investigation Ongoing': 'Under Review',
+    'False Alarm': 'Dismissed',
+}
 
 
-def _notify_security_staff(subject, message):
+def _notify_relevant_users(subject, message):
     recipients = list(
-        UserProfile.objects.filter(role__in=['ADMIN', 'SECURITY'])
+        UserProfile.objects.filter(role__in=['ADMIN', 'SECURITY', 'STUDENT'])
         .exclude(user__email='')
         .values_list('user__email', flat=True)
     )
@@ -39,10 +46,15 @@ class IncidentListView(View):
     @method_decorator(require_auth)
     def get(self, request):
         user = request.user
-        if hasattr(user, 'profile') and user.profile.role == 'STUDENT':
-            incidents = Incident.objects.filter(reporter=user).order_by('-created_at')
+        own_first = 0 if hasattr(user, 'profile') and user.profile.role == 'STUDENT' else None
+        incidents = Incident.objects.all()
+        if own_first is not None:
+            incidents = incidents.order_by(
+                models.Case(when=models.Q(reporter=user), then=models.Value(0), default=models.Value(1)),
+                '-created_at',
+            )
         else:
-            incidents = Incident.objects.all().order_by('-created_at')
+            incidents = incidents.order_by('-created_at')
 
         data = [
             {
@@ -55,6 +67,8 @@ class IncidentListView(View):
                 'longitude': inc.longitude,
                 'severity': inc.severity,
                 'status': inc.status,
+                'reporter_id': inc.reporter_id,
+                'reporter_username': inc.reporter.username if inc.reporter else None,
                 'image_url': inc.image_url,
                 'created_at': inc.created_at.strftime('%Y-%m-%d %H:%M:%S'),
             }
@@ -70,6 +84,7 @@ class IncidentListView(View):
             inc_id = f"INC{count:04d}"
             user = request.user
             status = data.get('status', 'Reported')
+            status = LEGACY_STATUS_MAP.get(status, status)
             if status not in STATUS_CHOICES:
                 status = 'Reported'
 
@@ -95,7 +110,7 @@ class IncidentListView(View):
                 alert_type='INCIDENT_BROADCAST',
                 location_name=inc.location_name,
             )
-            _notify_security_staff(
+            _notify_relevant_users(
                 f'New incident {inc.incident_id} reported',
                 f'Location: {inc.location_name}\nStatus: {inc.status}\nTime: {inc.created_at.strftime("%Y-%m-%d %H:%M:%S")}'
             )
@@ -110,7 +125,7 @@ class IncidentDetailView(View):
     def patch(self, request, incident_id):
         try:
             data = json.loads(request.body)
-            status = data.get('status')
+            status = LEGACY_STATUS_MAP.get(data.get('status'), data.get('status'))
             if status not in STATUS_CHOICES:
                 return JsonResponse({'error': 'Invalid status value.'}, status=400)
 
@@ -118,19 +133,19 @@ class IncidentDetailView(View):
             if not incident:
                 return JsonResponse({'error': 'Incident not found.'}, status=404)
 
-            if request.user.profile.role != 'ADMIN':
-                return JsonResponse({'error': 'Only administrators can update incident status.'}, status=403)
+            if request.user.profile.role not in ['ADMIN', 'SECURITY']:
+                return JsonResponse({'error': 'Only administrators and security staff can update incident status.'}, status=403)
 
             incident.status = status
             incident.save()
 
-            Alert.objects.create(
+            Notification.objects.create(
                 title=f"Incident {incident.incident_id} status updated",
                 message=f"Status changed to {incident.status} for {incident.location_name}.",
-                alert_type='SECURITY_DISPATCH',
+                notification_type='INCIDENT_UPDATE',
                 location_name=incident.location_name,
             )
-            _notify_security_staff(
+            _notify_relevant_users(
                 f'Incident {incident.incident_id} status changed',
                 f'Location: {incident.location_name}\nStatus: {incident.status}\nTime: {timezone.now().strftime("%Y-%m-%d %H:%M:%S")}'
             )

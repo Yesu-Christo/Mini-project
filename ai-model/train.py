@@ -1,4 +1,5 @@
 import os
+import json
 import pickle
 import numpy as np
 import pandas as pd
@@ -41,6 +42,7 @@ def train_model():
     except ImportError:
         print("scikit-learn not found. Using Fallback AI Model.")
         model = FallbackModel()
+        acc = None
     
     save_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "saved_models")
     os.makedirs(save_dir, exist_ok=True)
@@ -48,6 +50,9 @@ def train_model():
     
     with open(model_path, "wb") as f:
         pickle.dump(model, f)
+
+    with open(os.path.join(save_dir, "metrics.json"), "w", encoding="utf-8") as f:
+        json.dump({'accuracy': acc}, f)
     
     # Save a copy in root ai-model
     root_pkl = os.path.join(os.path.dirname(os.path.abspath(__file__)), "crime_prediction.pkl")

@@ -15,3 +15,15 @@ class Alert(models.Model):
 
     def __str__(self):
         return f"{self.title} - {self.location_name}"
+
+
+class Notification(models.Model):
+    title = models.CharField(max_length=150)
+    message = models.TextField()
+    notification_type = models.CharField(max_length=50, default='INCIDENT_UPDATE')
+    location_name = models.CharField(max_length=150, blank=True)
+    is_read = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.title

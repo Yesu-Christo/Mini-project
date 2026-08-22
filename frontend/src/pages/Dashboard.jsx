@@ -1,10 +1,13 @@
-import React from 'react';
+import React, { useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts';
 import { AlertTriangle, CalendarDays, MapPin, BrainCircuit, ShieldAlert, RefreshCw } from 'lucide-react';
 import { StatCard } from '../components/Card';
 import Map from '../components/Map';
 import Table from '../components/Table';
+import Modal from '../components/Modal';
 import { useAppData } from '../context/AppDataContext';
+import { useAuth } from '../context/AuthContext';
 
 const fallbackWeeklyData = [
   { day: 'Mon', incidents: 12 },
@@ -27,7 +30,47 @@ const CustomTooltip = ({ active, payload, label }) => {
 };
 
 export default function Dashboard() {
-  const { stats, weeklyTrends, riskZones, loadingAll, refreshAll } = useAppData();
+  const { stats, weeklyTrends, riskZones, loadingAll, refreshAll, incidents, updateIncidentStatus } = useAppData();
+  const { user } = useAuth();
+  const navigate = useNavigate();
+  const [selectedIncident, setSelectedIncident] = useState(null);
+  const [statusUpdating, setStatusUpdating] = useState(false);
+  const [statusMessage, setStatusMessage] = useState('');
+  const [recentIncidentList, setRecentIncidentList] = useState([]);
+
+  const reviewStatuses = ['Reported', 'Under Review', 'Verified', 'Resolved', 'Dismissed'];
+  const canReviewIncidents = user?.role === 'ADMIN' || user?.role === 'SECURITY';
+
+  const incidentSummary = useMemo(() => {
+    return incidents?.slice(0, 5) || [];
+  }, [incidents]);
+
+  const openIncident = (incident) => {
+    setSelectedIncident(incident);
+    setRecentIncidentList(incidentSummary);
+    setStatusMessage('');
+  };
+
+  const openIncidentList = () => {
+    setSelectedIncident({ listMode: true, title: 'Recent incidents' });
+    setRecentIncidentList(incidentSummary);
+    setStatusMessage('');
+  };
+
+  const handleStatusChange = async (nextStatus) => {
+    if (!selectedIncident) return;
+    setStatusUpdating(true);
+    setStatusMessage('');
+    const incidentId = selectedIncident.incident_id || selectedIncident.id;
+    const result = await updateIncidentStatus(incidentId, nextStatus);
+    if (result.success) {
+      setSelectedIncident({ ...selectedIncident, status: result.status });
+      setStatusMessage(`Incident ${incidentId} marked as ${result.status}.`);
+    } else {
+      setStatusMessage(result.error || 'Status update failed.');
+    }
+    setStatusUpdating(false);
+  };
 
   return (
     <div>
@@ -50,6 +93,7 @@ export default function Dashboard() {
           icon={AlertTriangle}
           iconClass="red"
           meta="Historical & current"
+          onClick={openIncidentList}
         />
         <StatCard
           label="Today's Incidents"
@@ -57,6 +101,7 @@ export default function Dashboard() {
           icon={CalendarDays}
           iconClass="amber"
           meta="Last 24 hours"
+          onClick={openIncidentList}
         />
         <StatCard
           label="High Risk Zones"
@@ -76,7 +121,16 @@ export default function Dashboard() {
 
       {/* Active Alerts counter card */}
       <div style={{ marginBottom: '1.5rem' }}>
-        <div className="card" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0.9rem 1.25rem' }}>
+        <div
+          className="card"
+          onClick={() => navigate('/alerts')}
+          role="button"
+          tabIndex={0}
+          onKeyDown={(event) => {
+            if (event.key === 'Enter' || event.key === ' ') navigate('/alerts');
+          }}
+          style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0.9rem 1.25rem', cursor: 'pointer' }}
+        >
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
             <div className="stat-icon stat-icon-blue" style={{ width: 34, height: 34 }}>
               <ShieldAlert size={16} />
@@ -91,6 +145,73 @@ export default function Dashboard() {
           <span className="badge badge-active">Live</span>
         </div>
       </div>
+
+      <Modal isOpen={!!selectedIncident} onClose={() => setSelectedIncident(null)} title={selectedIncident?.listMode ? 'Recent incidents' : `Incident ${selectedIncident?.incident_id || selectedIncident?.id}`}>
+        {selectedIncident && selectedIncident.listMode ? (
+          <div style={{ display: 'grid', gap: '0.75rem' }}>
+            {recentIncidentList.length ? recentIncidentList.map((incident) => (
+              <button
+                key={incident.incident_id || incident.id}
+                className="btn btn-ghost"
+                style={{ justifyContent: 'space-between', textAlign: 'left', width: '100%' }}
+                onClick={() => {
+                  setSelectedIncident(incident);
+                  setRecentIncidentList(incidentSummary);
+                }}
+              >
+                <span>
+                  <strong>{incident.incident_id || incident.id}</strong> — {incident.category}
+                </span>
+                <span className={`badge ${incident.status === 'Reported' ? 'badge-reported' : incident.status === 'Under Review' ? 'badge-under-review' : incident.status === 'Verified' ? 'badge-verified' : incident.status === 'Resolved' ? 'badge-resolved' : 'badge-dismissed'}`}>
+                  {incident.status || 'Reported'}
+                </span>
+              </button>
+            )) : (
+              <div className="alert alert-info">No recent incidents available.</div>
+            )}
+          </div>
+        ) : selectedIncident && (
+          <div style={{ display: 'grid', gap: '1rem' }}>
+            <div style={{ display: 'grid', gap: '0.5rem' }}>
+              <div><strong>Category:</strong> {selectedIncident.category}</div>
+              <div><strong>Location:</strong> {selectedIncident.location_name}</div>
+              <div><strong>Severity:</strong> <span className={`badge badge-${(selectedIncident.severity || 'medium').toLowerCase()}`}>{selectedIncident.severity}</span></div>
+              <div><strong>Status:</strong> <span className={`badge badge-${(selectedIncident.status || 'pending').toLowerCase().replace(/\s+/g, '-')}`}>{selectedIncident.status}</span></div>
+              <div><strong>Reported:</strong> {selectedIncident.created_at}</div>
+              <div><strong>Description:</strong> {selectedIncident.description || 'No description available.'}</div>
+            </div>
+
+            {canReviewIncidents && <div>
+              <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600 }}>Review status</label>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
+                {reviewStatuses.map((status) => (
+                  <button
+                    key={status}
+                    className={`btn btn-sm ${selectedIncident.status === status ? 'btn-primary' : 'btn-ghost'}`}
+                    onClick={() => handleStatusChange(status)}
+                    disabled={statusUpdating}
+                  >
+                    {status}
+                  </button>
+                ))}
+              </div>
+            </div>}
+
+            <button
+              className="btn btn-primary"
+              onClick={() => navigate(`/incidents/${selectedIncident.incident_id || selectedIncident.id}`)}
+            >
+              Open full incident details
+            </button>
+
+            {statusMessage && (
+              <div className={`alert ${statusMessage.includes('failed') || statusMessage.includes('Unable') ? 'alert-error' : 'alert-success'}`}>
+                {statusMessage}
+              </div>
+            )}
+          </div>
+        )}
+      </Modal>
 
       {/* Map + Chart */}
       <div className="grid-2">

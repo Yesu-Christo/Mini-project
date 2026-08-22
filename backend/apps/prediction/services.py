@@ -1,6 +1,7 @@
 import os
 import sys
 import pickle
+import math
 import pandas as pd
 import numpy as np
 from django.conf import settings
@@ -32,19 +33,23 @@ def _load_model():
 
 
 def calculate_area_risk(location_name, hour, day_of_week):
-    recent_window = timezone.now() - timezone.timedelta(days=30)
+    now = timezone.now()
+    recent_window = now - timezone.timedelta(days=30)
     query = Incident.objects.filter(created_at__gte=recent_window, location_name__icontains=location_name)
+    severity_weights = {'Low': 1, 'Medium': 2, 'High': 3, 'Critical': 4}
 
+    weighted_score = sum(
+        severity_weights.get(incident.severity, 2)
+        * math.exp(-((now - incident.created_at).total_seconds() / 86400) / 30)
+        for incident in query
+    )
     same_hour = query.filter(created_at__hour=hour).count()
     same_day = query.filter(created_at__week_day=day_of_week + 1).count()
-    total = query.count()
 
-    base_score = min(total / 20.0, 1.0)
+    severity_score = min(weighted_score / 20.0, 1.0)
     hour_score = min(same_hour / 5.0, 1.0)
     day_score = min(same_day / 8.0, 1.0)
-
-    risk_probability = round((base_score * 0.5) + (hour_score * 0.3) + (day_score * 0.2), 4)
-    return risk_probability
+    return round((severity_score * 0.6) + (hour_score * 0.25) + (day_score * 0.15), 4)
 
 
 def build_prediction_payload(location_name, lat, lng, hour, day_of_week, month):

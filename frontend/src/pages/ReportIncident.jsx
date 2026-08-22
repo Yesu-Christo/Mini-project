@@ -35,15 +35,17 @@ export default function ReportIncident() {
 
     const now     = new Date();
     const created = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')} ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
+    const payload = { ...form, status: 'Reported' };
 
     try {
-      const res = await createIncident(form);
+      const res = await createIncident(payload);
       const newInc = {
         incident_id:   res.data.incident_id,
         category:      form.category,
+        description:   form.description,
         location_name: form.location_name,
         severity:      form.severity,
-        status:        'Pending',
+        status:        'Reported',
         created_at:    created,
       };
       addIncident(newInc);
@@ -51,14 +53,14 @@ export default function ReportIncident() {
       setStatus('success');
       setForm(initialForm);
     } catch {
-      // Demo fallback — still updates the dashboard
       const fakeId  = `INC${String(Math.floor(1000 + Math.random() * 9000))}`;
       const newInc  = {
         incident_id:   fakeId,
         category:      form.category,
+        description:   form.description,
         location_name: form.location_name,
         severity:      form.severity,
-        status:        'Pending',
+        status:        'Reported',
         created_at:    created,
       };
       addIncident(newInc);

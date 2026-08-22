@@ -13,15 +13,7 @@ const TYPE_META = {
 export default function Alerts() {
   const { alerts, loadingAll, addAlert, refreshAll } = useAppData();
   const { user } = useAuth();
-
-  if (user?.role === 'STUDENT') {
-    return (
-      <div className="card" style={{ padding: '2rem', textAlign: 'center' }}>
-        <h2>Access Denied</h2>
-        <p>Live Alerts are restricted to Security and Admin users.</p>
-      </div>
-    );
-  }
+  const isSecurityOrAdmin = user?.role === 'SECURITY' || user?.role === 'ADMIN';
   const [form,    setForm]    = useState({ title: '', message: '', location_name: 'Campus Wide', alert_type: 'HIGH_RISK_ZONE' });
   const [sending, setSending] = useState(false);
 
@@ -60,51 +52,52 @@ export default function Alerts() {
       </div>
 
       <div className="grid-2">
-        {/* Compose */}
-        <div className="card">
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1.1rem' }}>
-            <Send size={15} color="var(--blue)" />
-            <p className="card-title" style={{ marginBottom: 0 }}>Broadcast New Alert</p>
-          </div>
+        {isSecurityOrAdmin && (
+          <div className="card">
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1.1rem' }}>
+              <Send size={15} color="var(--blue)" />
+              <p className="card-title" style={{ marginBottom: 0 }}>Broadcast New Alert</p>
+            </div>
 
-          <form onSubmit={handleSend} style={{ display: 'flex', flexDirection: 'column', gap: '0.9rem' }}>
-            <div className="form-group">
-              <label className="form-label">Alert Type</label>
-              <select className="form-control" value={form.alert_type} onChange={e => setForm(f => ({ ...f, alert_type: e.target.value }))}>
-                {Object.entries(TYPE_META).map(([k, v]) => <option key={k} value={k}>{v.label}</option>)}
-              </select>
-            </div>
-            <div className="form-group">
-              <label className="form-label">Alert Title</label>
-              <input type="text" className="form-control" value={form.title}
-                onChange={e => setForm(f => ({ ...f, title: e.target.value }))}
-                placeholder="e.g. High Theft Warning" required />
-            </div>
-            <div className="form-group">
-              <label className="form-label">Target Location</label>
-              <input type="text" className="form-control" value={form.location_name}
-                onChange={e => setForm(f => ({ ...f, location_name: e.target.value }))} />
-            </div>
-            <div className="form-group">
-              <label className="form-label">Message Details</label>
-              <textarea rows={3} className="form-control" value={form.message}
-                onChange={e => setForm(f => ({ ...f, message: e.target.value }))}
-                placeholder="Enter alert details for security personnel…" required />
-            </div>
-            <button type="submit" className="btn btn-danger btn-full" disabled={sending}>
-              {sending
-                ? <><div className="spinner" style={{ width: 14, height: 14, borderWidth: 2 }} /> Sending…</>
-                : <><Bell size={14} /> Broadcast Alert</>
-              }
-            </button>
-          </form>
-        </div>
+            <form onSubmit={handleSend} style={{ display: 'flex', flexDirection: 'column', gap: '0.9rem' }}>
+              <div className="form-group">
+                <label className="form-label">Alert Type</label>
+                <select className="form-control" value={form.alert_type} onChange={e => setForm(f => ({ ...f, alert_type: e.target.value }))}>
+                  {Object.entries(TYPE_META).map(([k, v]) => <option key={k} value={k}>{v.label}</option>)}
+                </select>
+              </div>
+              <div className="form-group">
+                <label className="form-label">Alert Title</label>
+                <input type="text" className="form-control" value={form.title}
+                  onChange={e => setForm(f => ({ ...f, title: e.target.value }))}
+                  placeholder="e.g. High Theft Warning" required />
+              </div>
+              <div className="form-group">
+                <label className="form-label">Target Location</label>
+                <input type="text" className="form-control" value={form.location_name}
+                  onChange={e => setForm(f => ({ ...f, location_name: e.target.value }))} />
+              </div>
+              <div className="form-group">
+                <label className="form-label">Message Details</label>
+                <textarea rows={3} className="form-control" value={form.message}
+                  onChange={e => setForm(f => ({ ...f, message: e.target.value }))}
+                  placeholder="Enter alert details for security personnel…" required />
+              </div>
+              <button type="submit" className="btn btn-danger btn-full" disabled={sending}>
+                {sending
+                  ? <><div className="spinner" style={{ width: 14, height: 14, borderWidth: 2 }} /> Sending…</>
+                  : <><Bell size={14} /> Broadcast Alert</>
+                }
+              </button>
+            </form>
+          </div>
+        )}
 
         {/* Feed — live from context */}
         <div>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.75rem' }}>
-            <p className="card-title" style={{ marginBottom: 0 }}>Active Alerts</p>
-            <span className="badge badge-active">{alerts.length} active</span>
+            <p className="card-title" style={{ marginBottom: 0 }}>Active Live Alerts</p>
+            <span className="badge badge-active">{alerts.filter(alert => alert.is_active !== false).length} active</span>
           </div>
 
           {loadingAll ? (

@@ -1,12 +1,14 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+
 class Incident(models.Model):
     STATUS_CHOICES = (
         ('Reported', 'Reported'),
-        ('Investigation Ongoing', 'Investigation Ongoing'),
+        ('Under Review', 'Under Review'),
+        ('Verified', 'Verified'),
         ('Resolved', 'Resolved'),
-        ('False Alarm', 'False Alarm'),
+        ('Dismissed', 'Dismissed'),
     )
     SEVERITY_CHOICES = (
         ('Low', 'Low'),
@@ -14,7 +16,7 @@ class Incident(models.Model):
         ('High', 'High'),
         ('Critical', 'Critical'),
     )
-    
+
     incident_id = models.CharField(max_length=20, unique=True)
     reporter = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
     category = models.CharField(max_length=100)
@@ -23,7 +25,7 @@ class Incident(models.Model):
     latitude = models.FloatField()
     longitude = models.FloatField()
     severity = models.CharField(max_length=20, choices=SEVERITY_CHOICES, default='Medium')
-    status = models.CharField(max_length=30, choices=STATUS_CHOICES, default='Pending')
+    status = models.CharField(max_length=30, choices=STATUS_CHOICES, default='Reported')
     image_url = models.CharField(max_length=255, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
