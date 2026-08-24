@@ -29,6 +29,7 @@ export const resetPassword  = (data) => api.post('/accounts/reset-password/', da
 // Incidents
 export const getIncidents          = ()     => api.get('/incidents/');
 export const createIncident        = (data) => api.post('/incidents/', data);
+export const activateEmergency     = (data) => api.post('/incidents/emergency/', data);
 export const updateIncidentStatus  = (incidentId, status) => api.patch(`/incidents/${incidentId}/`, { status });
 
 // Prediction

@@ -42,6 +42,60 @@ def _notify_relevant_users(subject, message):
     )
 
 @method_decorator(csrf_exempt, name='dispatch')
+class EmergencyAlertView(View):
+    @method_decorator(require_auth)
+    def post(self, request):
+        try:
+            if request.user.profile.role != 'STUDENT':
+                return JsonResponse({'error': 'Only students can activate an emergency alert.'}, status=403)
+
+            data = json.loads(request.body or '{}')
+            latitude = float(data.get('latitude', settings.CAMPUS_DEFAULT_LAT))
+            longitude = float(data.get('longitude', settings.CAMPUS_DEFAULT_LNG))
+            location_name = data.get('location_name') or f'Live location ({latitude:.6f}, {longitude:.6f})'
+            count = Incident.objects.count() + 1
+            inc = Incident.objects.create(
+                incident_id=f'INC{count:04d}', reporter=request.user, category='Emergency',
+                description='Emergency SOS activated by a student. Dispatch patrol immediately.',
+                location_name=location_name, latitude=latitude, longitude=longitude,
+                severity='Critical', status='Reported',
+            )
+
+            dispatch_message = (
+                f'EMERGENCY: Dispatch patrol immediately to {location_name}. '
+                f'Coordinates: {latitude:.6f}, {longitude:.6f}.'
+            )
+            Alert.objects.create(
+                title=f'EMERGENCY DISPATCH: {inc.incident_id}', message=dispatch_message,
+                alert_type='EMERGENCY', location_name=location_name,
+            )
+            Notification.objects.create(
+                title=f'Emergency dispatch: {inc.incident_id}', message=dispatch_message,
+                notification_type='EMERGENCY', location_name=location_name,
+            )
+            _notify_relevant_users(
+                f'EMERGENCY DISPATCH: {inc.incident_id}',
+                f'{dispatch_message}\nStudent: {request.user.username}',
+            )
+
+            return JsonResponse({
+                'message': 'Emergency alert sent. Patrol has been notified.',
+                'incident': {
+                    'id': inc.id, 'incident_id': inc.incident_id, 'category': inc.category,
+                    'description': inc.description, 'location_name': inc.location_name,
+                    'latitude': inc.latitude, 'longitude': inc.longitude, 'severity': inc.severity,
+                    'status': inc.status, 'reporter_id': inc.reporter_id,
+                    'reporter_username': request.user.username,
+                    'created_at': inc.created_at.strftime('%Y-%m-%d %H:%M:%S'),
+                },
+            }, status=201)
+        except (TypeError, ValueError, json.JSONDecodeError) as error:
+            return JsonResponse({'error': f'Invalid emergency location: {error}'}, status=400)
+        except Exception as error:
+            return JsonResponse({'error': str(error)}, status=400)
+
+
+@method_decorator(csrf_exempt, name='dispatch')
 class IncidentListView(View):
     @method_decorator(require_auth)
     def get(self, request):

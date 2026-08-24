@@ -3,9 +3,12 @@ import { Outlet } from 'react-router-dom';
 import Sidebar from '../components/Sidebar';
 import Navbar  from '../components/Navbar';
 import Footer  from '../components/Footer';
+import EmergencyButton from '../components/EmergencyButton';
+import { useAuth } from '../context/AuthContext';
 
 export default function AppLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const { user } = useAuth();
 
   return (
     <div className="app-shell">
@@ -29,6 +32,7 @@ export default function AppLayout() {
         </main>
         <Footer />
       </div>
+      {user?.role === 'STUDENT' && <EmergencyButton />}
     </div>
   );
 }

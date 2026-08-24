@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { Bell, Send, RefreshCw, AlertTriangle, Radio, Shield } from 'lucide-react';
+import { Bell, Send, RefreshCw, AlertTriangle, Radio, Shield, Siren } from 'lucide-react';
 import { createAlert } from '../services/api';
 import { useAppData } from '../context/AppDataContext';
 import { useAuth } from '../context/AuthContext';
 
 const TYPE_META = {
+  EMERGENCY:          { label: 'Emergency Dispatch', icon: Siren,       color: 'var(--red)'   },
   HIGH_RISK_ZONE:     { label: 'High Risk Zone', icon: AlertTriangle, color: 'var(--red)'   },
   INCIDENT_BROADCAST: { label: 'Broadcast',      icon: Radio,         color: 'var(--amber)' },
   SECURITY_DISPATCH:  { label: 'Dispatch',       icon: Shield,        color: 'var(--blue)'  },

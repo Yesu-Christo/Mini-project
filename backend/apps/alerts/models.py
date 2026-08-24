@@ -2,6 +2,7 @@ from django.db import models
 
 class Alert(models.Model):
     ALERT_TYPES = (
+        ('EMERGENCY', 'Emergency Dispatch'),
         ('HIGH_RISK_ZONE', 'High Risk Zone Warning'),
         ('INCIDENT_BROADCAST', 'Incident Broadcast'),
         ('SECURITY_DISPATCH', 'Security Dispatch'),

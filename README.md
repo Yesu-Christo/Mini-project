@@ -44,6 +44,20 @@ npm run dev
 ```
 App runs at **http://localhost:5173/**
 
+### 4. Deploy the Frontend to Vercel
+Create a Vercel project from this repository with **`frontend`** as the root directory. Vercel will detect the Vite build automatically; the included `frontend/vercel.json` keeps React Router routes working on refresh.
+
+Add these environment variables in the Vercel project settings:
+
+```text
+VITE_API_BASE_URL=https://<your-deployed-backend-domain>/api
+VITE_API_TIMEOUT=10000
+VITE_TOKEN_KEY=cs_token
+VITE_USER_KEY=cs_user
+```
+
+The Django backend must be deployed separately and configured to allow the Vercel domain through CORS and CSRF trusted origins. Do not use the local `VITE_BACKEND_TARGET` value in the Vercel deployment.
+
 ---
 
 ## 🔑 Default Test Credentials
