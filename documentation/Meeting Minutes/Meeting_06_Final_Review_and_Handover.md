@@ -115,7 +115,7 @@ The team rehearsed the 15-minute project presentation. Dr. Kornyo provided the f
 | Build REST API backend for all modules | All 6 endpoints functional | ✅ Achieved |
 | Build responsive React frontend dashboard | 10 pages with mobile support | ✅ Achieved |
 | Integrate interactive GIS map | Leaflet map with 9 KNUST locations | ✅ Achieved |
-| Implement role-based access control | STUDENT / SECURITY / ADMIN roles | ✅ Achieved |
+| Implement role-based access control | STUDENT / STAFF / SECURITY / ADMIN / IT roles | ✅ Achieved |
 | Apply KNUST official branding | Green `#006B3F` + Gold `#FDB913` throughout | ✅ Achieved |
 | Comprehensive documentation | All 7 documents complete | ✅ Achieved |
 | Deploy to public hosting | Deferred to Phase 6 | 🔲 Planned |

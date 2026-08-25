@@ -32,7 +32,7 @@ export default function AppLayout() {
         </main>
         <Footer />
       </div>
-      {user?.role === 'STUDENT' && <EmergencyButton />}
+      {(user?.role === 'STUDENT' || user?.role === 'STAFF') && <EmergencyButton />}
     </div>
   );
 }

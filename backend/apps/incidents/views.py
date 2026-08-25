@@ -26,7 +26,7 @@ LEGACY_STATUS_MAP = {
 
 def _notify_relevant_users(subject, message):
     recipients = list(
-        UserProfile.objects.filter(role__in=['ADMIN', 'SECURITY', 'STUDENT'])
+        UserProfile.objects.filter(role__in=['ADMIN', 'SECURITY'])
         .exclude(user__email='')
         .values_list('user__email', flat=True)
     )
@@ -46,8 +46,8 @@ class EmergencyAlertView(View):
     @method_decorator(require_auth)
     def post(self, request):
         try:
-            if request.user.profile.role != 'STUDENT':
-                return JsonResponse({'error': 'Only students can activate an emergency alert.'}, status=403)
+            if request.user.profile.role not in ['STUDENT', 'STAFF']:
+                return JsonResponse({'error': 'Only students and university staff can activate an emergency alert.'}, status=403)
 
             data = json.loads(request.body or '{}')
             latitude = float(data.get('latitude', settings.CAMPUS_DEFAULT_LAT))
@@ -56,14 +56,16 @@ class EmergencyAlertView(View):
             count = Incident.objects.count() + 1
             inc = Incident.objects.create(
                 incident_id=f'INC{count:04d}', reporter=request.user, category='Emergency',
-                description='Emergency SOS activated by a student. Dispatch patrol immediately.',
+                description='Emergency SOS activated by a student or university staff member. Dispatch patrol immediately.',
                 location_name=location_name, latitude=latitude, longitude=longitude,
                 severity='Critical', status='Reported',
             )
 
             dispatch_message = (
                 f'EMERGENCY: Dispatch patrol immediately to {location_name}. '
-                f'Coordinates: {latitude:.6f}, {longitude:.6f}.'
+                f'Coordinates: {latitude:.6f}, {longitude:.6f}. '
+                f'Student ID: {request.user.profile.school_id}. '
+                f'Student email: {request.user.email or "Not provided"}.'
             )
             Alert.objects.create(
                 title=f'EMERGENCY DISPATCH: {inc.incident_id}', message=dispatch_message,
@@ -75,7 +77,7 @@ class EmergencyAlertView(View):
             )
             _notify_relevant_users(
                 f'EMERGENCY DISPATCH: {inc.incident_id}',
-                f'{dispatch_message}\nStudent: {request.user.username}',
+                dispatch_message,
             )
 
             return JsonResponse({
@@ -86,6 +88,8 @@ class EmergencyAlertView(View):
                     'latitude': inc.latitude, 'longitude': inc.longitude, 'severity': inc.severity,
                     'status': inc.status, 'reporter_id': inc.reporter_id,
                     'reporter_username': request.user.username,
+                    'reporter_school_id': request.user.profile.school_id,
+                    'reporter_email': request.user.email,
                     'created_at': inc.created_at.strftime('%Y-%m-%d %H:%M:%S'),
                 },
             }, status=201)

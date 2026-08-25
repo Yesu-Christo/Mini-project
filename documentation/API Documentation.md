@@ -69,17 +69,24 @@ Register a new user account.
 **Request Body:**
 ```json
 {
-  "username": "student2",
+  "role": "STUDENT",
+  "school_id": "STU100",
+  "first_name": "Ama",
+  "last_name": "Mensah",
+  "other_name": "Akosua",
   "password": "pass1234",
-  "email": "student2@st.knust.edu.gh",
-  "role": "STUDENT"
+  "email": "ama@st.knust.edu.gh",
+  "program": "BSc Computer Science"
 }
 ```
+
+For `STAFF`, `SECURITY`, `ADMIN`, and `IT` accounts, use `title`, `other_name`, `occupation`, and `department` as applicable. Every account requires `first_name`, `last_name`, `school_id`, `email`, and `password`. Students require `program`; `STAFF` and `ADMIN` require `department`.
 
 **Success Response `201 Created`:**
 ```json
 {
-  "message": "Registration successful"
+  "message": "Registration successful",
+  "role": "STUDENT"
 }
 ```
 
@@ -90,7 +97,7 @@ Register a new user account.
 }
 ```
 
-**Role options:** `STUDENT` | `SECURITY` | `ADMIN`
+**Role options:** `STUDENT` | `STAFF` | `SECURITY` | `ADMIN` | `IT`
 
 ---
 

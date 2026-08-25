@@ -20,6 +20,10 @@ erDiagram
         int user_id FK UK
         string school_id UK
         string role
+        string title
+        string other_name
+        string program
+        string occupation
         string phone_number
         string hall_or_department
         datetime created_at
@@ -64,7 +68,7 @@ erDiagram
 
 ## Controlled Values
 
-- User roles: `STUDENT`, `SECURITY`, `ADMIN`, `IT`
+- User roles: `STUDENT`, `STAFF`, `SECURITY`, `ADMIN`, `IT`
 - Incident severity: `Low`, `Medium`, `High`, `Critical`
 - Incident status: `Reported`, `Under Review`, `Verified`, `Resolved`, `Dismissed`
 - Alert type: `HIGH_RISK_ZONE`, `INCIDENT_BROADCAST`, `SECURITY_DISPATCH`

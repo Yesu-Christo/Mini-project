@@ -436,6 +436,26 @@ body {
 }
 .emergency-status.error { color: #fca5a5; border-color: rgba(239,68,68,0.4); }
 
+.emergency-banner {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  margin-bottom: 1rem;
+  padding: 0.85rem 1rem;
+  color: #fff;
+  background: #991b1b;
+  border: 1px solid #fca5a5;
+  border-radius: 6px;
+  animation: emergency-pulse 1s ease-in-out infinite alternate;
+}
+
+.emergency-banner span { margin-left: auto; font-size: 0.82rem; }
+
+@keyframes emergency-pulse {
+  from { box-shadow: 0 0 0 rgba(239, 68, 68, 0.2); }
+  to { box-shadow: 0 0 18px rgba(239, 68, 68, 0.65); }
+}
+
 /* =============================================
    Forms
    ============================================= */
@@ -678,7 +698,7 @@ select.form-control { cursor: pointer; appearance: none; background-image: url("
 
 .role-selection-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 0.5rem;
   margin-bottom: 1.25rem;
 }
@@ -712,6 +732,23 @@ select.form-control { cursor: pointer; appearance: none; background-image: url("
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.quick-access-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 0.45rem;
+}
+
+.quick-access-grid .btn {
+  min-width: 0;
+  padding-left: 0.25rem;
+  padding-right: 0.25rem;
+}
+
+@media (max-width: 520px) {
+  .login-card { padding: 2rem 1.25rem; }
+  .quick-access-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
 .role-card-title {
   font-size: 0.75rem;

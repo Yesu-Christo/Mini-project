@@ -7,11 +7,16 @@ class UserProfile(models.Model):
         ('STUDENT', 'Student'),
         ('SECURITY', 'Security Personnel'),
         ('ADMIN', 'Administrator'),
+        ('STAFF', 'University Staff'),
         ('IT', 'IT Support'),
     )
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
     school_id = models.CharField(max_length=20, unique=True)
     role = models.CharField(max_length=20, choices=ROLE_CHOICES, default='STUDENT')
+    title = models.CharField(max_length=20, blank=True)
+    other_name = models.CharField(max_length=100, blank=True)
+    program = models.CharField(max_length=150, blank=True)
+    occupation = models.CharField(max_length=150, blank=True)
     phone_number = models.CharField(max_length=20, blank=True, null=True)
     hall_or_department = models.CharField(max_length=100, blank=True, null=True)
     created_at = models.DateTimeField(default=timezone.now)

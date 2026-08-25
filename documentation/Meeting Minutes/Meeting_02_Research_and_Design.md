@@ -91,7 +91,7 @@ The team agreed on the following core tables:
 | Table | App | Purpose |
 |-------|-----|---------|
 | `auth_user` | Django built-in | Core user accounts |
-| `accounts_userprofile` | accounts | Role extension (STUDENT / SECURITY / ADMIN) |
+| `accounts_userprofile` | accounts | Role extension (STUDENT / STAFF / SECURITY / ADMIN / IT), academic and professional identity details |
 | `incidents_incident` | incidents | Crime incident reports |
 | `alerts_alert` | alerts | Security broadcast alerts |
 

@@ -63,7 +63,7 @@ The objectives of the project are to:
 2. Develop a machine-learning model for estimating high-risk incident conditions.
 3. Visualise campus risk zones using an interactive GIS map.
 4. Provide dashboards and alerts for security monitoring.
-5. Apply role-based access for students, security personnel, and administrators.
+5. Apply role-based access for students, university staff, security personnel, administrators, and IT support.
 6. Demonstrate the complete frontend, backend, database, and AI workflow in a working prototype.
 
 ## 1.4 Scope
@@ -92,7 +92,7 @@ Classification assigns an input to a category. CampusShield AI uses a Random For
 A GIS presents data according to geographic location. The project uses Leaflet to display KNUST locations and colour-coded risk zones on an interactive map.
 
 ### Role-based access control
-Role-based access control gives users permissions according to their roles. CampusShield AI distinguishes among students, security personnel, and administrators.
+Role-based access control gives users permissions according to their roles. CampusShield AI supports students, university staff, security personnel, administrators, and IT support. Students register with a program of study, while staff accounts capture a title, occupation, department, staff ID, and professional identity details. Security personnel and administrators can review incidents and alerts; students and university staff are the main reporting and information users.
 
 ## 2.2 Related Works and Systems
 

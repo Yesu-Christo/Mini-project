@@ -2,17 +2,21 @@ import React, { useState } from 'react';
 import { Edit2, Save, X } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
-const ROLE_BADGE = { ADMIN: 'badge-admin', SECURITY: 'badge-security', STUDENT: 'badge-student' };
+const ROLE_BADGE = { ADMIN: 'badge-admin', SECURITY: 'badge-security', STAFF: 'badge-security', IT: 'badge-security', STUDENT: 'badge-student' };
 
 export default function Profile() {
   const { user } = useAuth();
   const [editing, setEditing] = useState(false);
   const [profile, setProfile] = useState({
-    fullname:   'Dr. Oliver Kornyo',
+    fullname:   [user?.first_name, user?.last_name].filter(Boolean).join(' ') || 'CampusShield User',
     email:      user?.email || 'admin@knust.edu.gh',
     phone:      '+233 20 000 0001',
-    department: 'Computer Science Department',
-    studentId:  'CS-ADM-001',
+    title:      user?.title || '',
+    otherName:  user?.other_name || '',
+    department: user?.hall_or_department || 'Not provided',
+    program:    user?.program || '',
+    occupation: user?.occupation || '',
+    studentId:  user?.school_id || 'Not provided',
   });
   const [saved, setSaved] = useState(false);
 
@@ -83,10 +87,15 @@ export default function Profile() {
         </div>
 
         <div className="form-grid-2">
-          <Field label="Full Name"         fieldKey="fullname" />
-          <Field label="KNUST Email"        fieldKey="email"      type="email" />
-          <Field label="Phone Number"       fieldKey="phone" />
-          <Field label="Department / Hall"  fieldKey="department" />
+          <Field label="Full Name" fieldKey="fullname" />
+          <Field label="Other Name" fieldKey="otherName" />
+          <Field label="KNUST Email" fieldKey="email" type="email" />
+          <Field label="Phone Number" fieldKey="phone" />
+          <Field label="Staff / Student ID" fieldKey="studentId" />
+          {user?.role === 'STUDENT' && <Field label="Program of Study" fieldKey="program" />}
+          {user?.role !== 'STUDENT' && <Field label="Title" fieldKey="title" />}
+          {user?.role !== 'STUDENT' && <Field label="Occupation" fieldKey="occupation" />}
+          <Field label="Department / Hall" fieldKey="department" />
         </div>
       </div>
     </div>

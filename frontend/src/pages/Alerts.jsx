@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Bell, Send, RefreshCw, AlertTriangle, Radio, Shield, Siren } from 'lucide-react';
 import { createAlert } from '../services/api';
 import { useAppData } from '../context/AppDataContext';
@@ -17,6 +17,48 @@ export default function Alerts() {
   const isSecurityOrAdmin = user?.role === 'SECURITY' || user?.role === 'ADMIN';
   const [form,    setForm]    = useState({ title: '', message: '', location_name: 'Campus Wide', alert_type: 'HIGH_RISK_ZONE' });
   const [sending, setSending] = useState(false);
+  const [emergencyNotice, setEmergencyNotice] = useState('');
+  const knownEmergencyIds = useRef(null);
+
+  useEffect(() => {
+    if (!isSecurityOrAdmin) return undefined;
+    const poll = window.setInterval(refreshAll, 10000);
+    return () => window.clearInterval(poll);
+  }, [isSecurityOrAdmin, refreshAll]);
+
+  useEffect(() => {
+    if (!isSecurityOrAdmin) return;
+    const emergencyAlerts = alerts.filter(alert => (alert.alert_type || alert.type) === 'EMERGENCY');
+    const emergencyIds = new Set(emergencyAlerts.map(alert => alert.id));
+    if (knownEmergencyIds.current === null) {
+      knownEmergencyIds.current = emergencyIds;
+      return;
+    }
+
+    const newEmergency = emergencyAlerts.find(alert => !knownEmergencyIds.current.has(alert.id));
+    knownEmergencyIds.current = emergencyIds;
+    if (!newEmergency) return;
+
+    setEmergencyNotice(newEmergency.title);
+    const AudioContext = window.AudioContext || window.webkitAudioContext;
+    if (!AudioContext) return;
+    const audioContext = new AudioContext();
+    const now = audioContext.currentTime;
+    [0, 0.35, 0.7].forEach((offset, index) => {
+      const oscillator = audioContext.createOscillator();
+      const gain = audioContext.createGain();
+      oscillator.type = 'square';
+      oscillator.frequency.value = index % 2 ? 880 : 660;
+      gain.gain.setValueAtTime(0.0001, now + offset);
+      gain.gain.exponentialRampToValueAtTime(0.18, now + offset + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + offset + 0.25);
+      oscillator.connect(gain).connect(audioContext.destination);
+      oscillator.start(now + offset);
+      oscillator.stop(now + offset + 0.26);
+    });
+    window.setTimeout(() => audioContext.close(), 1200);
+    window.setTimeout(() => setEmergencyNotice(''), 12000);
+  }, [alerts, isSecurityOrAdmin]);
 
   const handleSend = async (e) => {
     e.preventDefault();
@@ -42,6 +84,13 @@ export default function Alerts() {
 
   return (
     <div>
+      {isSecurityOrAdmin && emergencyNotice && (
+        <div className="emergency-banner" role="alert">
+          <Siren size={18} />
+          <strong>{emergencyNotice}</strong>
+          <span>Immediate response required. Check the dispatch details below.</span>
+        </div>
+      )}
       <div className="page-header">
         <div>
           <h2 className="page-title">Live Emergency Alerts</h2>

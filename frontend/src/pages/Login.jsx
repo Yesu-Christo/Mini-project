@@ -36,8 +36,10 @@ export default function Login() {
       admin:     { school_id: 'ADM001', password: 'admin123'   },
       security1: { school_id: 'SEC001', password: 'sec123'     },
       student1:  { school_id: 'STU001', password: 'student123' },
+      staff1:    { school_id: 'STF001', password: 'staff123'   },
+      it1:       { school_id: 'IT001',  password: 'it123'      },
     };
-    setForm(map[role]);
+    setForm(map[role] || { school_id: '', password: '' });
     setError('');
   };
 
@@ -154,18 +156,20 @@ export default function Login() {
           <p style={{ fontSize: '0.72rem', color: 'var(--text-muted)', textAlign: 'center', marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.06em', fontWeight: 600 }}>
             Demo Quick Access
           </p>
-          <div style={{ display: 'flex', gap: '0.5rem' }}>
+          <div className="quick-access-grid">
             {[
               { key: 'admin',     label: 'Admin',    badge: 'badge-admin'    },
               { key: 'security1', label: 'Security', badge: 'badge-security' },
               { key: 'student1',  label: 'Student',  badge: 'badge-student'  },
+              { key: 'staff1',    label: 'Staff',    badge: 'badge-security' },
+              { key: 'it1',       label: 'IT',       badge: 'badge-security' },
             ].map(({ key, label, badge }) => (
               <button
                 key={key}
                 type="button"
                 onClick={() => quickLogin(key)}
                 className="btn btn-ghost btn-sm"
-                style={{ flex: 1, fontSize: '0.75rem' }}
+                style={{ fontSize: '0.75rem' }}
               >
                 <span className={`badge ${badge}`}>{label}</span>
               </button>

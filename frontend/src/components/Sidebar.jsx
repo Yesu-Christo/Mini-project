@@ -70,7 +70,7 @@ export default function Sidebar({ isOpen, onClose }) {
 
       {/* Navigation */}
       <nav className="sidebar-nav">
-        <NavGroup title="Main" items={[...navItems, ...(user?.role !== 'STUDENT' ? [alertItem] : [])]} />
+        <NavGroup title="Main" items={[...navItems, ...(['SECURITY', 'ADMIN'].includes(user?.role) ? [alertItem] : [])]} />
         {user?.role === 'ADMIN' && <NavGroup title="Admin" items={adminItems} />}
         <NavGroup title="Account" items={accountItems} />
       </nav>

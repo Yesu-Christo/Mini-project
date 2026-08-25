@@ -46,9 +46,9 @@ A web-based platform that:
 
 1. Develop a machine learning model trained on KNUST campus spatial-temporal crime data to predict high-risk zones
 2. Build a REST API backend using Django to handle incident reporting, user management, predictions, and alerts
-3. Build a modern, responsive React frontend dashboard for students, security personnel, and administrators
+3. Build a modern, responsive React frontend dashboard for students, university staff, security personnel, administrators, and IT support
 4. Integrate an interactive Leaflet GIS map with colour-coded crime risk overlays
-5. Provide a role-based access control system (Student / Security / Admin)
+5. Provide a role-based access control system (Student / Staff / Security / Admin / IT)
 6. Document the full system for academic submission and future development
 
 ---
@@ -104,9 +104,9 @@ A web-based platform that:
 | Feature | Description | Status |
 |---------|-------------|--------|
 | User Login | Authenticate with username and password | ✅ Done |
-| Quick Demo Access | One-click login for Admin/Security/Student | ✅ Done |
-| User Registration | Create new account with role selection | ✅ Done |
-| Role-Based Access | STUDENT / SECURITY / ADMIN roles | ✅ Done |
+| Quick Demo Access | One-click login for Admin/Security/Student/Staff/IT | ✅ Done |
+| User Registration | Role-specific identity and academic/professional details | ✅ Done |
+| Role-Based Access | STUDENT / STAFF / SECURITY / ADMIN / IT roles | ✅ Done |
 | Auth Context | Persistent login via localStorage | ✅ Done |
 | Protected Routes | Unauthenticated users redirected to login | ✅ Done |
 | User Management Page | Admin view of all users with search | ✅ Done |

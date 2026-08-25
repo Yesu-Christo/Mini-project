@@ -34,6 +34,8 @@ export function AuthProvider({ children }) {
         STU001: { id: 3, username: 'student1', email: `student1@${DEMO_EMAIL_DOMAIN}`, role: 'STUDENT', school_id: 'STU001' },
         SEC001: { id: 2, username: 'security1', email: `sec1@${DEMO_EMAIL_DOMAIN}`, role: 'SECURITY', school_id: 'SEC001' },
         ADM001: { id: 1, username: 'admin',    email: `admin@${DEMO_EMAIL_DOMAIN}`,    role: 'ADMIN',    school_id: 'ADM001' },
+        STF001: { id: 4, username: 'staff1',   email: `staff1@${DEMO_EMAIL_DOMAIN}`,   role: 'STAFF',    school_id: 'STF001' },
+        IT001:  { id: 5, username: 'it1',      email: `it1@${DEMO_EMAIL_DOMAIN}`,      role: 'IT',       school_id: 'IT001' },
       };
       if (mockUsers[school_id] && password) {
         const userData = mockUsers[school_id];

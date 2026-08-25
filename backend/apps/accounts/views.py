@@ -16,6 +16,7 @@ ROLE_PREFIXES = {
     'STU': 'STUDENT',
     'SEC': 'SECURITY',
     'ADM': 'ADMIN',
+    'STF': 'STAFF',
     'IT': 'IT',
 }
 
@@ -48,6 +49,11 @@ class LoginView(View):
                     'email': profile.user.email,
                     'role': profile.role,
                     'school_id': profile.school_id,
+                    'title': profile.title,
+                    'other_name': profile.other_name,
+                    'program': profile.program,
+                    'occupation': profile.occupation,
+                    'hall_or_department': profile.hall_or_department,
                 }
             }, status=200)
         except Exception as e:
@@ -63,8 +69,14 @@ class RegisterView(View):
             email = data.get('email', '').strip()
             requested_role = data.get('role', '').strip().upper()
             department = data.get('department', '').strip()
+            first_name = data.get('first_name', '').strip()
+            last_name = data.get('last_name', '').strip()
+            other_name = data.get('other_name', '').strip()
+            title = data.get('title', '').strip()
+            program = data.get('program', '').strip()
+            occupation = data.get('occupation', '').strip()
 
-            id_label = 'Student ID' if requested_role == 'STUDENT' else ('Staff ID' if requested_role in ['SECURITY', 'ADMIN'] else 'ID')
+            id_label = 'Student ID' if requested_role == 'STUDENT' else ('Staff ID' if requested_role in ['SECURITY', 'ADMIN', 'STAFF'] else 'ID')
 
             if not school_id:
                 return JsonResponse({'error': f'{id_label} is required.'}, status=400)
@@ -75,15 +87,27 @@ class RegisterView(View):
             if not password:
                 return JsonResponse({'error': 'Password is required.'}, status=400)
 
-            valid_roles = {'STUDENT': 'STUDENT', 'SECURITY': 'SECURITY', 'ADMIN': 'ADMIN', 'IT': 'IT'}
+            valid_roles = {'STUDENT': 'STUDENT', 'SECURITY': 'SECURITY', 'ADMIN': 'ADMIN', 'STAFF': 'STAFF', 'IT': 'IT'}
             if requested_role in valid_roles:
                 role = valid_roles[requested_role]
             else:
                 role_prefix = school_id[:3]
                 role = ROLE_PREFIXES.get(role_prefix, 'STUDENT')
 
-            if role == 'ADMIN' and not department:
-                return JsonResponse({'error': 'Department is required for Admin registration.'}, status=400)
+            if not first_name or not last_name:
+                return JsonResponse({'error': 'First name and last name are required.'}, status=400)
+
+            if role == 'STUDENT' and not program:
+                return JsonResponse({'error': 'Program of study is required for students.'}, status=400)
+
+            if role in ['STAFF', 'SECURITY', 'ADMIN', 'IT'] and not occupation:
+                return JsonResponse({'error': 'Occupation is required for university staff.'}, status=400)
+
+            if role in ['STAFF', 'SECURITY', 'ADMIN', 'IT'] and not title:
+                return JsonResponse({'error': 'Title is required for university staff.'}, status=400)
+
+            if role in ['STAFF', 'ADMIN'] and not department:
+                return JsonResponse({'error': 'Department is required for university staff.'}, status=400)
 
             if not re.match(r'^[A-Z0-9_-]{3,20}$', school_id):
                 return JsonResponse({'error': f'Invalid {id_label} format.'}, status=400)
@@ -95,12 +119,19 @@ class RegisterView(View):
             if User.objects.filter(username=username).exists():
                 username = f"{username}_{User.objects.count() + 1}"
 
-            user = User.objects.create_user(username=username, password=password, email=email)
+            user = User.objects.create_user(
+                username=username, password=password, email=email,
+                first_name=first_name, last_name=last_name,
+            )
             UserProfile.objects.create(
                 user=user,
                 school_id=school_id,
                 role=role,
-                hall_or_department=department if role == 'ADMIN' and department else None
+                title=title,
+                other_name=other_name,
+                program=program if role == 'STUDENT' else '',
+                occupation=occupation,
+                hall_or_department=department or None,
             )
 
             return JsonResponse({'message': 'Registration successful', 'role': role}, status=201)

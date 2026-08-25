@@ -53,7 +53,7 @@ The connected storyboard is available here: [CampusShield screen-flow wireframe]
 | [ Sign In ]                                      |
 |                                                  |
 | Forgot password?       Create account            |
-| Demo access: Admin | Security | Student          |
+| Demo access: Admin | Security | Student | Staff | IT |
 +--------------------------------------------------+
 ```
 
@@ -64,15 +64,19 @@ States: initial, submitting, invalid credentials, successful login, and backend 
 ```text
 +--------------------------------------------------+
 | Create your account                              |
-| Full name [_______________________________]      |
-| Username  [_______________________________]      |
-| Email     [_______________________________]      |
-| Password  [_______________________________]      |
-| Role      [ Student v ]                           |
+| Account type [ Student v ]                       |
+| First name [____________] Last name [__________] |
+| Other name (optional) [________________________] |
+| Student/Staff ID [_____________________________] |
+| University email [_____________________________] |
+| Program of study [____________________________]  |
+| Password [_____________________________________]  |
 |                                                  |
 | [ Create account ]   Already have an account?    |
 +--------------------------------------------------+
 ```
+
+For university staff, show Title, Occupation, and Department conditionally. Student registration requires Program of Study; staff registration uses a Staff ID and university email.
 
 ### Password recovery - `/forgot-password` and `/reset-password`
 

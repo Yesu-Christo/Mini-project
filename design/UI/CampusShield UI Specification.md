@@ -86,7 +86,7 @@ Use short text badges for statuses and risk levels:
 
 ### Authentication
 
-Use a focused centered form with the CampusShield shield mark, short security-oriented supporting text, and a clear route between login, registration, and password recovery. Demo access buttons should be visually secondary to normal sign-in.
+Use a focused centered form with the CampusShield shield mark, short security-oriented supporting text, and a clear route between login, registration, and password recovery. Registration supports Student, University Staff, Security, Admin, and IT account types. Collect first name, last name, optional other name, ID, university email, and password; show Program of Study for students and Title, Occupation, and Department for staff roles as applicable. Demo access buttons should be visually secondary to normal sign-in.
 
 ### Dashboard
 

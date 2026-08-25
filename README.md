@@ -67,6 +67,8 @@ The Django backend must be deployed separately and configured to allow the Verce
 | security1  | sec123      | Security  |
 | student1   | student123  | Student   |
 
+The registration flow also supports University Staff and IT Support accounts. Students provide their program of study; staff provide professional title, occupation, department, and staff ID. See [API Documentation](documentation/API%20Documentation.md) for the complete registration contract.
+
 ---
 
 ## 📡 API Endpoints

@@ -62,7 +62,11 @@ Extends `auth_user` with KNUST-specific role and contact information.
 |--------|------|-------------|-------------|
 | `id` | INTEGER | PK, AUTO | Primary key |
 | `user_id` | INTEGER | FK → auth_user(id), UNIQUE, CASCADE DELETE | One-to-one link to Django user |
-| `role` | VARCHAR(20) | NOT NULL, DEFAULT='STUDENT' | User role: STUDENT / SECURITY / ADMIN |
+| `role` | VARCHAR(20) | NOT NULL, DEFAULT='STUDENT' | User role: STUDENT / STAFF / SECURITY / ADMIN / IT |
+| `title` | VARCHAR(20) | BLANK allowed | Professional title for staff users |
+| `other_name` | VARCHAR(100) | BLANK allowed | Other or middle name |
+| `program` | VARCHAR(150) | BLANK allowed | Student program of study |
+| `occupation` | VARCHAR(150) | BLANK allowed | University occupation for staff users |
 | `phone_number` | VARCHAR(20) | NULLABLE | Contact phone number |
 | `hall_or_department` | VARCHAR(100) | NULLABLE | Student hall or staff department |
 
@@ -73,6 +77,8 @@ Extends `auth_user` with KNUST-specific role and contact information.
 | `STUDENT` | Student |
 | `SECURITY` | Security Personnel |
 | `ADMIN` | Administrator |
+| `STAFF` | University Staff |
+| `IT` | IT Support |
 
 ---
 

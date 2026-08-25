@@ -24,7 +24,7 @@ export default function Users() {
       <div className="page-header">
         <div>
           <h2 className="page-title">User Management</h2>
-          <p className="page-subtitle">Manage student, security personnel, and admin accounts.</p>
+          <p className="page-subtitle">Manage student, university staff, security, admin, and IT accounts.</p>
         </div>
         <button className="btn btn-primary">
           <UserPlus size={15} /> Invite User

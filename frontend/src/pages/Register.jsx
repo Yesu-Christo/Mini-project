@@ -4,11 +4,17 @@ import { Shield, GraduationCap, ShieldCheck, Building, User, Mail, Lock, Eye, Ey
 import { register } from '../services/api';
 
 export default function Register() {
-  const [role, setRole] = useState('STUDENT'); // 'STUDENT' | 'SECURITY' | 'ADMIN'
+  const [role, setRole] = useState('STUDENT');
   const [formData, setFormData] = useState({
+    first_name: '',
+    last_name: '',
+    other_name: '',
+    title: '',
     school_id: '',
     email: '',
     department: '',
+    program: '',
+    occupation: '',
     password: '',
   });
   const [showPw, setShowPw] = useState(false);
@@ -40,8 +46,28 @@ export default function Register() {
       return;
     }
 
-    if (role === 'ADMIN' && !formData.department.trim()) {
-      setError('Please enter your Department.');
+    if (!formData.first_name.trim() || !formData.last_name.trim()) {
+      setError('Please enter your first name and last name.');
+      return;
+    }
+
+    if (role === 'STUDENT' && !formData.program.trim()) {
+      setError('Please enter your program of study.');
+      return;
+    }
+
+    if (isStaffRole && !formData.occupation.trim()) {
+      setError('Please enter your occupation at the university.');
+      return;
+    }
+
+    if (isStaffRole && !formData.title) {
+      setError('Please select your professional title.');
+      return;
+    }
+
+    if ((role === 'STAFF' || role === 'ADMIN') && !formData.department.trim()) {
+      setError('Please enter your department.');
       return;
     }
 
@@ -60,9 +86,15 @@ export default function Register() {
     try {
       await register({
         role,
+        first_name: formData.first_name.trim(),
+        last_name: formData.last_name.trim(),
+        other_name: formData.other_name.trim(),
+        title: formData.title,
         school_id: formData.school_id.trim(),
         email: formData.email.trim(),
-        department: role === 'ADMIN' ? formData.department.trim() : undefined,
+        department: formData.department.trim(),
+        program: role === 'STUDENT' ? formData.program.trim() : undefined,
+        occupation: isStaffRole ? formData.occupation.trim() : undefined,
         password: formData.password,
       });
 
@@ -87,6 +119,16 @@ export default function Register() {
       emailPlaceholder: 'e.g. username@st.knust.edu.gh',
     },
     {
+      key: 'STAFF',
+      title: 'University Staff',
+      desc: 'Faculty and Staff',
+      icon: User,
+      idLabel: 'Staff ID',
+      idPlaceholder: 'e.g. STF1234 or EMP5678',
+      emailLabel: 'University Email',
+      emailPlaceholder: 'e.g. name@knust.edu.gh',
+    },
+    {
       key: 'SECURITY',
       title: 'Security',
       desc: 'Security Personnel',
@@ -95,6 +137,16 @@ export default function Register() {
       idPlaceholder: 'e.g. SEC1234 or STF5678',
       emailLabel: 'Email Address',
       emailPlaceholder: 'e.g. security@knust.edu.gh',
+    },
+    {
+      key: 'IT',
+      title: 'IT Support',
+      desc: 'Technology Services',
+      icon: Shield,
+      idLabel: 'Staff ID',
+      idPlaceholder: 'e.g. IT1234 or STF5678',
+      emailLabel: 'University Email',
+      emailPlaceholder: 'e.g. support@knust.edu.gh',
     },
     {
       key: 'ADMIN',
@@ -109,6 +161,7 @@ export default function Register() {
   ];
 
   const currentRoleConfig = rolesConfig.find(r => r.key === role);
+  const isStaffRole = ['STAFF', 'SECURITY', 'ADMIN', 'IT'].includes(role);
 
   return (
     <div className="login-page">
@@ -178,6 +231,36 @@ export default function Register() {
           </label>
 
           {/* Student ID / Staff ID */}
+          <div className="grid-2" style={{ gap: '0.75rem' }}>
+            <div className="form-group">
+              <label className="form-label" htmlFor="first_name">First Name</label>
+              <input id="first_name" name="first_name" type="text" className="form-control"
+                placeholder="e.g. Ama" value={formData.first_name} onChange={handleChange} required />
+            </div>
+            <div className="form-group">
+              <label className="form-label" htmlFor="last_name">Last Name</label>
+              <input id="last_name" name="last_name" type="text" className="form-control"
+                placeholder="e.g. Mensah" value={formData.last_name} onChange={handleChange} required />
+            </div>
+          </div>
+
+          <div className="grid-2" style={{ gap: '0.75rem' }}>
+            {isStaffRole && (
+              <div className="form-group">
+                <label className="form-label" htmlFor="title">Title</label>
+                <select id="title" name="title" className="form-control" value={formData.title} onChange={handleChange}>
+                  <option value="">Select title</option>
+                  {['Dr.', 'Prof.', 'Mr.', 'Mrs.', 'Miss', 'Rev.', 'Eng.'].map(item => <option key={item} value={item}>{item}</option>)}
+                </select>
+              </div>
+            )}
+            <div className="form-group">
+              <label className="form-label" htmlFor="other_name">Other Name <span style={{ color: 'var(--text-muted)', fontWeight: 400 }}>(optional)</span></label>
+              <input id="other_name" name="other_name" type="text" className="form-control"
+                placeholder="Middle name" value={formData.other_name} onChange={handleChange} />
+            </div>
+          </div>
+
           <div className="form-group">
             <label className="form-label" htmlFor="school_id">{currentRoleConfig.idLabel}</label>
             <div style={{ position: 'relative' }}>
@@ -196,8 +279,23 @@ export default function Register() {
             </div>
           </div>
 
-          {/* Department (Admin only) */}
-          {role === 'ADMIN' && (
+          {role === 'STUDENT' && (
+            <div className="form-group">
+              <label className="form-label" htmlFor="program">Program of Study</label>
+              <input id="program" name="program" type="text" className="form-control"
+                placeholder="e.g. BSc Computer Science" value={formData.program} onChange={handleChange} required />
+            </div>
+          )}
+
+          {isStaffRole && (
+            <div className="form-group">
+              <label className="form-label" htmlFor="occupation">Occupation</label>
+              <input id="occupation" name="occupation" type="text" className="form-control"
+                placeholder="e.g. Lecturer, Research Assistant, Security Officer" value={formData.occupation} onChange={handleChange} required />
+            </div>
+          )}
+
+          {['STAFF', 'ADMIN'].includes(role) && (
             <div className="form-group">
               <label className="form-label" htmlFor="department">Department</label>
               <div style={{ position: 'relative' }}>
@@ -208,7 +306,7 @@ export default function Register() {
                   type="text"
                   className="form-control"
                   style={{ paddingLeft: '2.25rem' }}
-                  placeholder="e.g. Security Services, IT Directorate"
+                  placeholder="e.g. Computer Science, Security Services"
                   value={formData.department}
                   onChange={handleChange}
                   required

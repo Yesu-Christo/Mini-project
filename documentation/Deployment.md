@@ -66,10 +66,10 @@ To create demo users (first time only):
 python manage.py shell -c "
 from django.contrib.auth.models import User
 from apps.accounts.models import UserProfile
-users = [('admin','admin123','admin@knust.edu.gh','ADMIN'),('security1','sec123','sec@knust.edu.gh','SECURITY'),('student1','student123','student1@st.knust.edu.gh','STUDENT')]
-for u,p,e,r in users:
-    usr = User.objects.create_user(username=u,password=p,email=e)
-    UserProfile.objects.create(user=usr,role=r)
+users = [('admin','admin123','admin@knust.edu.gh','ADMIN','Dr.','Oliver','Kornyo','Administrator','Administration',''),('security1','sec123','sec@knust.edu.gh','SECURITY','Mr.','Kojo','Mensah','Security Officer','Security Services',''),('student1','student123','student1@st.knust.edu.gh','STUDENT','','Ama','Owusu','','','BSc Computer Science')]
+for u,p,e,r,title,first_name,last_name,occupation,department,program in users:
+   usr = User.objects.create_user(username=u,password=p,email=e,first_name=first_name,last_name=last_name)
+   UserProfile.objects.create(user=usr,role=r,title=title,occupation=occupation,hall_or_department=department,program=program)
 print('Users created.')
 "
 ```
@@ -101,6 +101,8 @@ Open **http://localhost:5173** in your browser and log in with:
 | admin | admin123 | ADMIN |
 | security1 | sec123 | SECURITY |
 | student1 | student123 | STUDENT |
+
+Registration also supports `STAFF` and `IT` accounts. Run migrations before creating users so the title, program, occupation, and other-name profile fields are available.
 
 Or click the **ADMIN / SECURITY / STUDENT** quick-access buttons on the login page.
 
