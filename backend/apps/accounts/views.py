@@ -4,13 +4,36 @@ import uuid
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
-from django.core.mail import send_mail
+from django.core.mail import send_mail, EmailMultiAlternatives
+from django.template.loader import render_to_string
 from django.http import JsonResponse
 from django.utils import timezone
 from django.views import View
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 from .models import PasswordResetToken, UserProfile
+
+
+def _send_html_email(subject, template_name, context, to_email):
+    """Send a plain-text + HTML email using a template."""
+    html_body = render_to_string(template_name, context)
+    # plain text fallback — strip tags roughly
+    plain_body = (
+        f"{subject}\n\n"
+        + "\n".join(
+            line.strip()
+            for line in html_body.splitlines()
+            if line.strip() and not line.strip().startswith('<')
+        )
+    )
+    msg = EmailMultiAlternatives(
+        subject=subject,
+        body=plain_body,
+        from_email=settings.DEFAULT_FROM_EMAIL,
+        to=[to_email],
+    )
+    msg.attach_alternative(html_body, "text/html")
+    msg.send(fail_silently=True)
 
 ROLE_PREFIXES = {
     'STU': 'STUDENT',
@@ -134,9 +157,21 @@ class RegisterView(View):
                 hall_or_department=department or None,
             )
 
+            # Send welcome email with HTML template
+            _send_html_email(
+                subject='Welcome to CampusShield AI — KNUST',
+                template_name='emails/welcome.html',
+                context={
+                    'first_name': first_name,
+                    'school_id': school_id,
+                    'role': role.capitalize(),
+                    'email': email,
+                    'frontend_url': settings.FRONTEND_URL,
+                },
+                to_email=email,
+            )
+
             return JsonResponse({'message': 'Registration successful', 'role': role}, status=201)
-        except Exception as e:
-            return JsonResponse({'error': str(e)}, status=400)
 
 @method_decorator(csrf_exempt, name='dispatch')
 class ForgotPasswordView(View):
@@ -161,12 +196,15 @@ class ForgotPasswordView(View):
             )
 
             reset_link = f"{settings.FRONTEND_URL}/reset-password?token={reset_token}"
-            send_mail(
-                'CampusShield Password Reset',
-                f'Use the following link to reset your password: {reset_link}\n\nThis link expires in 2 hours.',
-                settings.DEFAULT_FROM_EMAIL,
-                [profile.user.email],
-                fail_silently=True,
+            _send_html_email(
+                subject='Reset Your CampusShield AI Password',
+                template_name='emails/password_reset.html',
+                context={
+                    'school_id': profile.school_id,
+                    'reset_link': reset_link,
+                    'frontend_url': settings.FRONTEND_URL,
+                },
+                to_email=profile.user.email,
             )
             return JsonResponse({'message': 'Password reset instructions sent.'}, status=200)
         except Exception as e:
