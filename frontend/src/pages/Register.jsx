@@ -113,10 +113,10 @@ export default function Register() {
       title: 'Student',
       desc: 'KNUST Student',
       icon: GraduationCap,
-      idLabel: 'Student ID',
-      idPlaceholder: 'e.g. STU1234 or 20819283',
-      emailLabel: 'KNUST Mail',
-      emailPlaceholder: 'e.g. username@st.knust.edu.gh',
+      idLabel: 'Student No. / Ref No.',
+      idPlaceholder: 'e.g. 20732517 or 21022179',
+      emailLabel: 'KNUST Student Mail',
+      emailPlaceholder: 'e.g. 20732517@st.knust.edu.gh',
     },
     {
       key: 'STAFF',
@@ -280,11 +280,27 @@ export default function Register() {
           </div>
 
           {role === 'STUDENT' && (
-            <div className="form-group">
-              <label className="form-label" htmlFor="program">Program of Study</label>
-              <input id="program" name="program" type="text" className="form-control"
-                placeholder="e.g. BSc Computer Science" value={formData.program} onChange={handleChange} required />
-            </div>
+            <>
+              <div className="grid-2" style={{ gap: '0.75rem' }}>
+                <div className="form-group">
+                  <label className="form-label" htmlFor="department">College</label>
+                  <select id="department" name="department" className="form-control" value={formData.department} onChange={handleChange} required>
+                    <option value="">Select College</option>
+                    <option value="COS">COS — College of Science</option>
+                    <option value="CoE">CoE — College of Engineering</option>
+                    <option value="CoHS">CoHS — College of Health Sciences</option>
+                    <option value="CANR">CANR — College of Agriculture & Natural Resources</option>
+                    <option value="CABE">CABE — College of Art & Built Environment</option>
+                    <option value="CoHSS">CoHSS — College of Humanities & Social Sciences</option>
+                  </select>
+                </div>
+                <div className="form-group">
+                  <label className="form-label" htmlFor="program">Program of Study</label>
+                  <input id="program" name="program" type="text" className="form-control"
+                    placeholder="e.g. BSC. COMPUTER SCIENCE" value={formData.program} onChange={handleChange} required />
+                </div>
+              </div>
+            </>
           )}
 
           {isStaffRole && (
