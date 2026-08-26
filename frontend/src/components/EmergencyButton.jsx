@@ -24,7 +24,12 @@ export default function EmergencyButton() {
         })
         .catch((error) => {
           setState('ready');
-          setMessage(error?.response?.data?.error || 'Unable to send emergency alert. Try again.');
+          const errMsg = error?.response?.data?.error;
+          if (error?.response?.status === 401 || errMsg?.includes('Authentication')) {
+            setMessage('Please sign in as a Student or Staff member to activate Emergency SOS.');
+          } else {
+            setMessage(errMsg || 'Unable to send emergency alert. Try again.');
+          }
         });
     };
 
