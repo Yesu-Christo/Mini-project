@@ -17,15 +17,27 @@ class DashboardStatsView(View):
         today_incidents = Incident.objects.filter(created_at__date=now.date()).count()
         active_alerts_count = Alert.objects.filter(is_active=True).count()
 
-        last_week = now - timezone.timedelta(days=7)
-        weekly_trends = (
-            Incident.objects
-                .filter(created_at__gte=last_week)
+        # Generate last 7 days dynamically (from 6 days ago through today)
+        days_list = [now.date() - timezone.timedelta(days=i) for i in range(6, -1, -1)]
+
+        # Map incident count per date
+        incidents_by_day = {
+            item['day']: item['count']
+            for item in Incident.objects
+                .filter(created_at__date__gte=days_list[0])
                 .annotate(day=TruncDate('created_at'))
                 .values('day')
-                .order_by('day')
                 .annotate(count=Count('id'))
-        )
+        }
+
+        weekly_trends = [
+            {
+                'day': d.strftime('%a'),
+                'date': d.strftime('%Y-%m-%d'),
+                'incidents': incidents_by_day.get(d, 0)
+            }
+            for d in days_list
+        ]
 
         thirty_days_ago = now - timezone.timedelta(days=30)
         sixty_days_ago = now - timezone.timedelta(days=60)
@@ -80,7 +92,5 @@ class DashboardStatsView(View):
             'prediction_accuracy': prediction_accuracy,
             'active_alerts_count': active_alerts_count,
             'high_risk_areas': high_risk_areas,
-            'weekly_trends': [
-                {'day': item['day'].strftime('%a'), 'incidents': item['count']} for item in weekly_trends
-            ],
+            'weekly_trends': weekly_trends,
         }, status=200)

@@ -9,15 +9,38 @@ import Modal from '../components/Modal';
 import { useAppData } from '../context/AppDataContext';
 import { useAuth } from '../context/AuthContext';
 
-const fallbackWeeklyData = [
-  { day: 'Mon', incidents: 12 },
-  { day: 'Tue', incidents: 18 },
-  { day: 'Wed', incidents: 9  },
-  { day: 'Thu', incidents: 24 },
-  { day: 'Fri', incidents: 32 },
-  { day: 'Sat', incidents: 45 },
-  { day: 'Sun', incidents: 28 },
-];
+const computeDynamicWeeklyTrends = (incidents = [], backendWeeklyTrends = []) => {
+  if (backendWeeklyTrends && backendWeeklyTrends.length > 0) {
+    return backendWeeklyTrends;
+  }
+
+  const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+  const today = new Date();
+  const countsByDay = {};
+  const chartData = [];
+
+  for (let i = 6; i >= 0; i--) {
+    const d = new Date(today);
+    d.setDate(d.getDate() - i);
+    const dayKey = d.toISOString().slice(0, 10);
+    const dayName = dayNames[d.getDay()];
+    countsByDay[dayKey] = 0;
+    chartData.push({ day: dayName, date: dayKey, incidents: 0 });
+  }
+
+  (incidents || []).forEach((inc) => {
+    if (!inc.created_at) return;
+    const incDate = inc.created_at.slice(0, 10);
+    if (countsByDay[incDate] !== undefined) {
+      countsByDay[incDate] += 1;
+    }
+  });
+
+  return chartData.map((item) => ({
+    ...item,
+    incidents: countsByDay[item.date] || 0,
+  }));
+};
 
 const CustomTooltip = ({ active, payload, label }) => {
   if (!active || !payload?.length) return null;
@@ -44,6 +67,10 @@ export default function Dashboard() {
   const incidentSummary = useMemo(() => {
     return incidents?.slice(0, 5) || [];
   }, [incidents]);
+
+  const chartWeeklyData = useMemo(() => {
+    return computeDynamicWeeklyTrends(incidents, weeklyTrends);
+  }, [incidents, weeklyTrends]);
 
   const openIncident = (incident) => {
     setSelectedIncident(incident);
@@ -153,16 +180,29 @@ export default function Dashboard() {
               <button
                 key={incident.incident_id || incident.id}
                 className="btn btn-ghost"
-                style={{ justifyContent: 'space-between', textAlign: 'left', width: '100%' }}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justify: 'space-between',
+                  textAlign: 'left',
+                  width: '100%',
+                  padding: '0.65rem 0.75rem',
+                  gap: '0.5rem',
+                  minWidth: 0,
+                  height: 'auto',
+                }}
                 onClick={() => {
                   setSelectedIncident(incident);
                   setRecentIncidentList(incidentSummary);
                 }}
               >
-                <span>
+                <span style={{ minWidth: 0, flex: '1 1 auto', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', fontSize: '0.85rem' }}>
                   <strong>{incident.incident_id || incident.id}</strong> — {incident.category}
                 </span>
-                <span className={`badge ${incident.status === 'Reported' ? 'badge-reported' : incident.status === 'Under Review' ? 'badge-under-review' : incident.status === 'Verified' ? 'badge-verified' : incident.status === 'Resolved' ? 'badge-resolved' : 'badge-dismissed'}`}>
+                <span
+                  className={`badge ${incident.status === 'Reported' ? 'badge-reported' : incident.status === 'Under Review' ? 'badge-under-review' : incident.status === 'Verified' ? 'badge-verified' : incident.status === 'Resolved' ? 'badge-resolved' : 'badge-dismissed'}`}
+                  style={{ flexShrink: 0, fontSize: '0.68rem', padding: '0.2rem 0.45rem', whiteSpace: 'nowrap' }}
+                >
                   {incident.status || 'Reported'}
                 </span>
               </button>
@@ -224,7 +264,7 @@ export default function Dashboard() {
           <p className="card-title">Weekly Incident Trends</p>
           <p className="card-subtitle" style={{ marginBottom: '1.25rem' }}>KNUST campus — current week</p>
           <ResponsiveContainer width="100%" height={260}>
-            <BarChart data={weeklyTrends?.length ? weeklyTrends : (stats.weekly_trends?.length ? stats.weekly_trends : fallbackWeeklyData)} barSize={26}>
+            <BarChart data={chartWeeklyData} barSize={26}>
               <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" vertical={false} />
               <XAxis dataKey="day" tick={{ fill: 'var(--text-secondary)', fontSize: 12 }} axisLine={false} tickLine={false} />
               <YAxis tick={{ fill: 'var(--text-secondary)', fontSize: 12 }} axisLine={false} tickLine={false} />
