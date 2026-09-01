@@ -39,7 +39,11 @@ export function AuthProvider({ children }) {
       };
       if (mockUsers[school_id] && password) {
         const userData = mockUsers[school_id];
-        localStorage.setItem(TOKEN_KEY, `demo-token-${school_id}`);
+        // Use school_id directly as the token — the backend middleware resolves
+        // tokens by looking up UserProfile.school_id, so "demo-token-STU001"
+        // would never match. Storing the raw school_id fixes auth for all API
+        // calls (emergency SOS, status updates, incident creation) in demo mode.
+        localStorage.setItem(TOKEN_KEY, school_id);
         localStorage.setItem(USER_KEY, JSON.stringify(userData));
         setUser(userData);
         return { success: true, demo: true };
