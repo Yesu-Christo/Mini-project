@@ -18,45 +18,30 @@ import {
   updateIncidentStatus,
 } from '../services/api';
 
-// ─── Seed data (shown when backend is offline) ────────────────────────────
-const SEED_INCIDENTS = [
-  { incident_id: 'INC0001', category: 'Phone Snatching',  location_name: 'Brunei Hostels',      severity: 'High',     status: 'Under Investigation', created_at: '2026-07-29 08:30' },
-  { incident_id: 'INC0002', category: 'Theft',            location_name: 'KNUST Main Library',  severity: 'Medium',   status: 'Pending',             created_at: '2026-07-28 19:45' },
-  { incident_id: 'INC0003', category: 'Vandalism',        location_name: 'Unity Hall (Conti)',  severity: 'Low',      status: 'Resolved',            created_at: '2026-07-27 22:15' },
-  { incident_id: 'INC0004', category: 'Assault',          location_name: 'Ayeduase Gate Exit',  severity: 'Critical', status: 'Under Investigation', created_at: '2026-07-26 01:10' },
-  { incident_id: 'INC0005', category: 'Burglary',         location_name: 'Africa Hall Block B', severity: 'High',     status: 'Resolved',            created_at: '2026-07-25 14:00' },
-];
+// ─── Empty live state (default when backend is not connected yet) ────────
+const EMPTY_INCIDENTS = [];
 
-const SEED_ALERTS = [
-  { id: 1, title: 'High Crime Risk Alert',   message: 'Increase patrol near Ayeduase Gate after 8 PM.',           alert_type: 'HIGH_RISK_ZONE',     location_name: 'Ayeduase Gate',   created_at: '10 mins ago' },
-  { id: 2, title: 'Phone Snatching Warning', message: 'Multiple reports of phone snatching near Brunei Hostels.', alert_type: 'INCIDENT_BROADCAST', location_name: 'Brunei Hostels',  created_at: '1 hour ago' },
-  { id: 3, title: 'Security Dispatch',       message: 'Patrol team 3 deployed to Commercial Area.',               alert_type: 'SECURITY_DISPATCH',  location_name: 'Commercial Area', created_at: '3 hours ago' },
-];
+const EMPTY_ALERTS = [];
 
-const SEED_STATS = {
-  total_incidents:      350,
-  todays_incidents:     5,
-  high_risk_areas_count: 4,
-  prediction_accuracy:  '92.4%',
-  active_alerts_count:  3,
+const EMPTY_STATS = {
+  total_incidents: 0,
+  todays_incidents: 0,
+  high_risk_areas_count: 0,
+  prediction_accuracy: '0%',
+  active_alerts_count: 0,
 };
 
-const SEED_RISK_ZONES = [
-  { name: 'Brunei Complex Path',     risk: 'High',   incidents: 42, peak: '20:00 – 02:00' },
-  { name: 'Ayeduase Gate Exit',      risk: 'High',   incidents: 38, peak: '21:00 – 04:00' },
-  { name: 'Unity Hall Backyard',     risk: 'High',   incidents: 29, peak: '22:00 – 03:00' },
-  { name: 'Commercial Area Parking', risk: 'Medium', incidents: 18, peak: '19:00 – 23:00' },
-];
+const EMPTY_RISK_ZONES = [];
 
 // ─── Context ──────────────────────────────────────────────────────────────
 const AppDataContext = createContext(null);
 
 export function AppDataProvider({ children }) {
-  const [incidents,  setIncidents]  = useState(SEED_INCIDENTS);
-  const [alerts,     setAlerts]     = useState(SEED_ALERTS);
+  const [incidents,  setIncidents]  = useState(EMPTY_INCIDENTS);
+  const [alerts,     setAlerts]     = useState(EMPTY_ALERTS);
   const [notifications, setNotifications] = useState([]);
-  const [stats,      setStats]      = useState(SEED_STATS);
-  const [riskZones,  setRiskZones]  = useState(SEED_RISK_ZONES);
+  const [stats,      setStats]      = useState(EMPTY_STATS);
+  const [riskZones,  setRiskZones]  = useState(EMPTY_RISK_ZONES);
   const [weeklyTrends, setWeeklyTrends] = useState([]);
   const [loadingAll, setLoadingAll] = useState(true);
   const seeded = useRef(false);
