@@ -51,6 +51,13 @@ if _CORS_ORIGINS:
 else:
     CORS_ALLOW_ALL_ORIGINS = DEBUG  # open only in dev
 
+# ── CSRF ──────────────────────────────────────────────────────────────────
+# Required when DEBUG=False — Django rejects cross-origin unsafe requests
+# without a matching CSRF_TRUSTED_ORIGINS entry.
+# Reuse CORS_ALLOWED_ORIGINS if set, otherwise fall back to FRONTEND_URL.
+_CSRF_ORIGINS = os.environ.get('CORS_ALLOWED_ORIGINS', os.environ.get('FRONTEND_URL', ''))
+CSRF_TRUSTED_ORIGINS = [o.strip() for o in _CSRF_ORIGINS.split(',') if o.strip()]
+
 # ── URLs / Templates / WSGI ───────────────────────────────────────────────
 ROOT_URLCONF = 'config.urls'
 
