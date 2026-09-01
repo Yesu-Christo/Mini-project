@@ -56,7 +56,8 @@ class EmergencyAlertView(View):
     @method_decorator(require_auth)
     def post(self, request):
         try:
-            if request.user.profile.role not in ['STUDENT', 'STAFF']:
+            profile = getattr(request.user, 'profile', None)
+            if not profile or profile.role not in ['STUDENT', 'STAFF']:
                 return JsonResponse({'error': 'Only students and university staff can activate an emergency alert.'}, status=403)
 
             data = json.loads(request.body or '{}')
@@ -192,22 +193,32 @@ class IncidentDetailView(View):
     @method_decorator(require_auth)
     def patch(self, request, incident_id):
         try:
-            data = json.loads(request.body)
-            status = LEGACY_STATUS_MAP.get(data.get('status'), data.get('status'))
-            if status not in STATUS_CHOICES:
-                return JsonResponse({'error': 'Invalid status value.'}, status=400)
-
-            incident = Incident.objects.filter(incident_id=incident_id).first()
-            if not incident:
-                return JsonResponse({'error': 'Incident not found.'}, status=404)
-
+            # Check authentication and authorization first
             profile = getattr(request.user, 'profile', None)
             if profile is None or profile.role not in ['ADMIN', 'SECURITY']:
                 return JsonResponse({'error': 'Only administrators and security staff can update incident status.'}, status=403)
+            
+            # Parse the request body
+            try:
+                data = json.loads(request.body)
+            except json.JSONDecodeError:
+                return JsonResponse({'error': 'Invalid request format.'}, status=400)
+            
+            # Validate status value
+            status = LEGACY_STATUS_MAP.get(data.get('status'), data.get('status'))
+            if status not in STATUS_CHOICES:
+                return JsonResponse({'error': f'Invalid status value. Must be one of: {', '.join(STATUS_CHOICES)}'}, status=400)
 
+            # Find the incident
+            incident = Incident.objects.filter(incident_id=incident_id).first()
+            if not incident:
+                return JsonResponse({'error': f'Incident {incident_id} not found.'}, status=404)
+
+            # Update status
             incident.status = status
             incident.save()
 
+            # Create notification
             Notification.objects.create(
                 title=f"Incident {incident.incident_id} status updated",
                 message=f"Status changed to {incident.status} for {incident.location_name}.",
@@ -220,5 +231,9 @@ class IncidentDetailView(View):
             )
 
             return JsonResponse({'message': 'Incident status updated', 'status': incident.status}, status=200)
+        except json.JSONDecodeError as e:
+            return JsonResponse({'error': f'Invalid JSON: {str(e)}'}, status=400)
         except Exception as e:
-            return JsonResponse({'error': str(e)}, status=400)
+            import traceback
+            traceback.print_exc()  # Log the full error for debugging
+            return JsonResponse({'error': f'Status update failed: {str(e)}'}, status=500)

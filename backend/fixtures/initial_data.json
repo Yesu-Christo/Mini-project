@@ -1,6 +1,111 @@
 [
 {
   "model": "auth.user",
+  "pk": 1,
+  "fields": {
+    "password": "bcrypt_sha256$$2b$12$TZxbGD0AgDzHD1Q1CVFffeIRlqeedWcBds.WOGzjUsfZMyhxNxa0a",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "admin001",
+    "first_name": "Sarah",
+    "last_name": "Admin",
+    "email": "admin@knust.edu.gh",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-08-26T18:35:07.851Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "accounts.userprofile",
+  "pk": 1,
+  "fields": {
+    "user": 1,
+    "school_id": "ADM001",
+    "role": "ADMIN",
+    "title": "Dr.",
+    "other_name": "",
+    "program": "",
+    "occupation": "Campus Security Administrator",
+    "phone_number": "+233123456789",
+    "hall_or_department": "Office of Campus Security",
+    "created_at": "2026-08-26T18:35:08.074Z",
+    "updated_at": "2026-08-26T18:35:08.074Z"
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 2,
+  "fields": {
+    "password": "bcrypt_sha256$$2b$12$TZxbGD0AgDzHD1Q1CVFffeIRlqeedWcBds.WOGzjUsfZMyhxNxa0a",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "security001",
+    "first_name": "Kojo",
+    "last_name": "Security",
+    "email": "security@knust.edu.gh",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-08-26T18:35:07.851Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "accounts.userprofile",
+  "pk": 2,
+  "fields": {
+    "user": 2,
+    "school_id": "SEC001",
+    "role": "SECURITY",
+    "title": "Mr.",
+    "other_name": "",
+    "program": "",
+    "occupation": "Security Officer",
+    "phone_number": "+233123456790",
+    "hall_or_department": "Campus Security Services",
+    "created_at": "2026-08-26T18:35:08.074Z",
+    "updated_at": "2026-08-26T18:35:08.074Z"
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 3,
+  "fields": {
+    "password": "bcrypt_sha256$$2b$12$TZxbGD0AgDzHD1Q1CVFffeIRlqeedWcBds.WOGzjUsfZMyhxNxa0a",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "student001",
+    "first_name": "Ama",
+    "last_name": "Student",
+    "email": "student@st.knust.edu.gh",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-08-26T18:35:07.851Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "accounts.userprofile",
+  "pk": 3,
+  "fields": {
+    "user": 3,
+    "school_id": "STU001",
+    "role": "STUDENT",
+    "title": "",
+    "other_name": "",
+    "program": "Bachelor of Science in Computer Science",
+    "occupation": "",
+    "phone_number": null,
+    "hall_or_department": "",
+    "created_at": "2026-08-26T18:35:08.074Z",
+    "updated_at": "2026-08-26T18:35:08.074Z"
+  }
+},
+{
+  "model": "auth.user",
   "pk": 4,
   "fields": {
     "password": "bcrypt_sha256$$2b$12$TZxbGD0AgDzHD1Q1CVFffeIRlqeedWcBds.WOGzjUsfZMyhxNxa0a",

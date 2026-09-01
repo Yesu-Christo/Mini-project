@@ -25,8 +25,22 @@ export default function ReportIncident() {
   const [status,  setStatus]  = useState(null);
   const [msg,     setMsg]     = useState('');
   const [loading, setLoading] = useState(false);
+  const [imageFile, setImageFile] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
 
   const set = (key, val) => setForm(f => ({ ...f, [key]: val }));
+
+  const handleImageChange = (e) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setImageFile(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -35,7 +49,14 @@ export default function ReportIncident() {
 
     const now     = new Date();
     const created = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')} ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
-    const payload = { ...form, status: 'Reported' };
+    
+    let imageUrl = '';
+    // If image file exists, use base64 encoding
+    if (imageFile && imagePreview) {
+      imageUrl = imagePreview; // Send as data URL
+    }
+    
+    const payload = { ...form, status: 'Reported', image_url: imageUrl };
 
     try {
       const res = await createIncident(payload);
@@ -47,12 +68,15 @@ export default function ReportIncident() {
         severity:      form.severity,
         status:        'Reported',
         created_at:    created,
+        image_url:     imageUrl,
       };
       addIncident(newInc);
       setMsg(`Incident submitted! Ticket ID: ${res.data.incident_id}`);
       setStatus('success');
       setForm(initialForm);
-    } catch {
+      setImageFile(null);
+      setImagePreview(null);
+    } catch (error) {
       const fakeId  = `INC${String(Math.floor(1000 + Math.random() * 9000))}`;
       const newInc  = {
         incident_id:   fakeId,
@@ -62,11 +86,14 @@ export default function ReportIncident() {
         severity:      form.severity,
         status:        'Reported',
         created_at:    created,
+        image_url:     imageUrl,
       };
       addIncident(newInc);
       setMsg(`Incident submitted! Ticket ID: ${fakeId}`);
       setStatus('success');
       setForm(initialForm);
+      setImageFile(null);
+      setImagePreview(null);
     } finally {
       setLoading(false);
     }
@@ -145,7 +172,17 @@ export default function ReportIncident() {
 
           <div className="form-group">
             <label className="form-label">Upload Evidence / Images</label>
-            <input type="file" accept="image/*" className="form-control" />
+            <input 
+              type="file" 
+              accept="image/*" 
+              className="form-control" 
+              onChange={handleImageChange}
+            />
+            {imagePreview && (
+              <div style={{ marginTop: '0.75rem', borderRadius: 'var(--r-md)', overflow: 'hidden', border: '1px solid var(--border)', maxHeight: 200 }}>
+                <img src={imagePreview} alt="Preview" style={{ width: '100%', maxHeight: 200, objectFit: 'cover' }} />
+              </div>
+            )}
           </div>
 
           <div style={{ display: 'flex', justifyContent: 'flex-end', paddingTop: '0.5rem' }}>
