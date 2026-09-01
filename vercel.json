@@ -1,19 +1,18 @@
 {
-  "buildCommand": "cd frontend && npm install && npm run build",
+  "buildCommand": "npm run build",
   "outputDirectory": "frontend/dist",
-  "installCommand": "echo 'skip root install'",
-  "framework": null,
+  "installCommand": "echo skip",
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ],
   "env": {
     "VITE_API_BASE_URL": "https://campusshield-backend.onrender.com/api",
     "VITE_API_TIMEOUT": "10000",
     "VITE_TOKEN_KEY": "cs_token",
     "VITE_USER_KEY": "cs_user",
     "VITE_DEMO_EMAIL_DOMAIN": "knust.edu.gh"
-  },
-  "rewrites": [
-    {
-      "source": "/(.*)",
-      "destination": "/index.html"
-    }
-  ]
+  }
 }
