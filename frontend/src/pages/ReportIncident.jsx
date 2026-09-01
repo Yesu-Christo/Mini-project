@@ -77,23 +77,23 @@ export default function ReportIncident() {
       setImageFile(null);
       setImagePreview(null);
     } catch (error) {
-      const fakeId  = `INC${String(Math.floor(1000 + Math.random() * 9000))}`;
-      const newInc  = {
-        incident_id:   fakeId,
-        category:      form.category,
-        description:   form.description,
-        location_name: form.location_name,
-        severity:      form.severity,
-        status:        'Reported',
-        created_at:    created,
-        image_url:     imageUrl,
-      };
-      addIncident(newInc);
-      setMsg(`Incident submitted! Ticket ID: ${fakeId}`);
-      setStatus('success');
-      setForm(initialForm);
-      setImageFile(null);
-      setImagePreview(null);
+      // Surface the real error — do NOT create a phantom incident or show a
+      // fake success banner. An incident that never reached the database would
+      // silently vanish on the next page refresh, misleading the reporter.
+      const serverMsg = error?.response?.data?.error || error?.response?.data?.detail;
+      const statusCode = error?.response?.status;
+      let displayMsg;
+      if (statusCode === 401 || statusCode === 403) {
+        displayMsg = 'You must be signed in to report an incident.';
+      } else if (serverMsg) {
+        displayMsg = serverMsg;
+      } else if (!navigator.onLine) {
+        displayMsg = 'No internet connection. Please check your network and try again.';
+      } else {
+        displayMsg = 'Failed to submit incident. Please try again.';
+      }
+      setMsg(displayMsg);
+      setStatus('error');
     } finally {
       setLoading(false);
     }
