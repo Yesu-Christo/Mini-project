@@ -24,6 +24,16 @@ LEGACY_STATUS_MAP = {
 }
 
 
+def _reporter_details(user):
+    profile = getattr(user, 'profile', None)
+    return (
+        f"Reporter: {user.get_full_name() or user.username}\n"
+        f"Role: {profile.role if profile else 'UNKNOWN'}\n"
+        f"School ID: {profile.school_id if profile else 'N/A'}\n"
+        f"Email: {user.email or 'Not provided'}\n"
+    )
+
+
 def _notify_relevant_users(subject, message):
     recipients = list(
         UserProfile.objects.filter(role__in=['ADMIN', 'SECURITY'])
@@ -61,11 +71,11 @@ class EmergencyAlertView(View):
                 severity='Critical', status='Reported',
             )
 
+            reporter_info = _reporter_details(request.user)
             dispatch_message = (
-                f'EMERGENCY: Dispatch patrol immediately to {location_name}. '
-                f'Coordinates: {latitude:.6f}, {longitude:.6f}. '
-                f'Student ID: {request.user.profile.school_id}. '
-                f'Student email: {request.user.email or "Not provided"}.'
+                f'EMERGENCY: Dispatch patrol immediately to {location_name}.\n'
+                f'Coordinates: {latitude:.6f}, {longitude:.6f}.\n'
+                f'{reporter_info}'
             )
             Alert.objects.create(
                 title=f'EMERGENCY DISPATCH: {inc.incident_id}', message=dispatch_message,
@@ -191,7 +201,8 @@ class IncidentDetailView(View):
             if not incident:
                 return JsonResponse({'error': 'Incident not found.'}, status=404)
 
-            if request.user.profile.role not in ['ADMIN', 'SECURITY']:
+            profile = getattr(request.user, 'profile', None)
+            if profile is None or profile.role not in ['ADMIN', 'SECURITY']:
                 return JsonResponse({'error': 'Only administrators and security staff can update incident status.'}, status=403)
 
             incident.status = status

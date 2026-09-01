@@ -58,8 +58,37 @@ class EmergencyAlertTests(TestCase):
         self.assertEqual(response.status_code, 201)
         self.assertEqual(len(mail.outbox), 1)
         self.assertCountEqual(mail.outbox[0].to, ['security@example.com', 'admin@example.com'])
-        self.assertIn('Student ID: STU999', mail.outbox[0].body)
-        self.assertIn('Student email: student@example.com', mail.outbox[0].body)
+        body = mail.outbox[0].body.lower()
+        self.assertIn('reporter: student', body)
+        self.assertIn('role: student', body)
+        self.assertIn('school id: stu999', body)
+        self.assertIn('email: student@example.com', body)
+
+    def test_admin_can_update_incident_status(self):
+        admin = User.objects.create_user(username='admin2', password='test', email='admin2@example.com')
+        UserProfile.objects.create(user=admin, school_id='ADM100', role='ADMIN')
+        incident = Incident.objects.create(
+            incident_id='INC1001',
+            reporter=admin,
+            category='Theft',
+            description='Test incident',
+            location_name='Main Gate',
+            latitude=6.67,
+            longitude=-1.56,
+            severity='High',
+            status='Reported',
+        )
+
+        response = self.client.patch(
+            f'/api/incidents/{incident.incident_id}/',
+            data={'status': 'Verified'},
+            content_type='application/json',
+            HTTP_AUTHORIZATION='Bearer ADM100',
+        )
+
+        self.assertEqual(response.status_code, 200)
+        incident.refresh_from_db()
+        self.assertEqual(incident.status, 'Verified')
 
     def test_non_student_cannot_activate_emergency(self):
         security = User.objects.create_user(username='security', password='test')

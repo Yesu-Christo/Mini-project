@@ -3,6 +3,33 @@ import { MapPin, Siren } from 'lucide-react';
 import { activateEmergency } from '../services/api';
 import { useAppData } from '../context/AppDataContext';
 
+const playEmergencyTone = () => {
+  const AudioCtor = window.AudioContext || window.webkitAudioContext;
+  if (!AudioCtor) return;
+
+  try {
+    const audioContext = new AudioCtor();
+    const oscillator = audioContext.createOscillator();
+    const gain = audioContext.createGain();
+    const now = audioContext.currentTime;
+
+    oscillator.type = 'sawtooth';
+    oscillator.frequency.setValueAtTime(880, now);
+    gain.gain.setValueAtTime(0.0001, now);
+    gain.gain.exponentialRampToValueAtTime(0.18, now + 0.03);
+    gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.6);
+
+    oscillator.connect(gain);
+    gain.connect(audioContext.destination);
+    oscillator.start(now);
+    oscillator.stop(now + 0.6);
+
+    setTimeout(() => audioContext.close(), 700);
+  } catch {
+    // ignore browser audio failures silently
+  }
+};
+
 export default function EmergencyButton() {
   const { addIncident } = useAppData();
   const [state, setState] = useState('ready');
@@ -10,6 +37,7 @@ export default function EmergencyButton() {
 
   const sendEmergency = () => {
     if (state !== 'ready') return;
+    playEmergencyTone();
     setState('sending');
     setMessage('Locating you and notifying patrol...');
 
