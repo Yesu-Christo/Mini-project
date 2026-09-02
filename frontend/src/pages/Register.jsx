@@ -90,7 +90,7 @@ export default function Register() {
         last_name: formData.last_name.trim(),
         other_name: formData.other_name.trim(),
         title: formData.title,
-        school_id: formData.school_id.trim(),
+        school_id: formData.school_id.trim().toUpperCase(),
         email: formData.email.trim(),
         department: formData.department.trim(),
         program: role === 'STUDENT' ? formData.program.trim() : undefined,
@@ -101,7 +101,19 @@ export default function Register() {
       setSuccess('Registration successful! Redirecting to login...');
       setTimeout(() => navigate('/login'), 1500);
     } catch (err) {
-      setError(err?.response?.data?.error || 'Registration failed. Please try again.');
+      const serverMsg = err?.response?.data?.error;
+      const status = err?.response?.status;
+      if (serverMsg) {
+        setError(serverMsg);
+      } else if (status === 400) {
+        setError('Registration failed — check all fields and try again.');
+      } else if (status === 403) {
+        setError('That School ID or email is already registered.');
+      } else if (!navigator.onLine) {
+        setError('No internet connection. Please check your network.');
+      } else {
+        setError('Registration failed. Please try again.');
+      }
     } finally {
       setLoading(false);
     }
