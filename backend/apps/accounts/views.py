@@ -1,4 +1,5 @@
 import json
+import logging
 import re
 import uuid
 from django.conf import settings
@@ -11,11 +12,18 @@ from django.utils import timezone
 from django.views import View
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
+from apps.core.decorators import require_auth, require_role
 from .models import PasswordResetToken, UserProfile
+
+logger = logging.getLogger(__name__)
 
 
 def _send_html_email(subject, template_name, context, to_email):
-    """Send a plain-text + HTML email using a template."""
+    """Send a plain-text + HTML email using a template.
+
+    Failures are logged at ERROR level (visible in Render logs) instead
+    of being silently swallowed. Registration always succeeds regardless.
+    """
     html_body = render_to_string(template_name, context)
     # plain text fallback — strip tags roughly
     plain_body = (
@@ -33,7 +41,15 @@ def _send_html_email(subject, template_name, context, to_email):
         to=[to_email],
     )
     msg.attach_alternative(html_body, "text/html")
-    msg.send(fail_silently=True)
+    try:
+        msg.send(fail_silently=False)
+    except Exception as exc:
+        # Log the full exception so it appears in Render logs.
+        # Do NOT re-raise — email failure must never block registration.
+        logger.error(
+            "Failed to send email '%s' to %s: %s",
+            subject, to_email, exc, exc_info=True,
+        )
 
 ROLE_PREFIXES = {
     'STU': 'STUDENT',
@@ -241,3 +257,43 @@ class ResetPasswordView(View):
             return JsonResponse({'message': 'Password has been reset successfully.'}, status=200)
         except Exception as e:
             return JsonResponse({'error': str(e)}, status=400)
+
+@method_decorator(csrf_exempt, name='dispatch')
+class UserListView(View):
+    """GET /api/accounts/ — returns all registered users.
+
+    Restricted to ADMIN and SECURITY roles only.
+    Returns every UserProfile row joined with its Django User, ordered by
+    date_joined descending (newest first).
+    """
+    @method_decorator(require_role('ADMIN', 'SECURITY'))
+    def get(self, request):
+        try:
+            profiles = (
+                UserProfile.objects
+                .select_related('user')
+                .all()
+                .order_by('-user__date_joined')
+            )
+            data = [
+                {
+                    'id':              p.user.id,
+                    'username':        p.user.username,
+                    'first_name':      p.user.first_name,
+                    'last_name':       p.user.last_name,
+                    'email':           p.user.email,
+                    'school_id':       p.school_id,
+                    'role':            p.role,
+                    'title':           p.title,
+                    'program':         p.program,
+                    'occupation':      p.occupation,
+                    'hall_or_department': p.hall_or_department or '',
+                    'is_active':       p.user.is_active,
+                    'date_joined':     p.user.date_joined.strftime('%Y-%m-%d %H:%M:%S'),
+                }
+                for p in profiles
+            ]
+            return JsonResponse({'users': data, 'total': len(data)}, status=200)
+        except Exception as exc:
+            logger.error("UserListView error: %s", exc, exc_info=True)
+            return JsonResponse({'error': str(exc)}, status=500)
