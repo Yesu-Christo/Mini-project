@@ -80,11 +80,18 @@ TEMPLATES = [
 WSGI_APPLICATION = 'config.wsgi.application'
 
 # ── Database ──────────────────────────────────────────────────────────────
+# In production (Render), DATABASE_URL is set as an environment variable
+# pointing to the managed Postgres instance. dj_database_url parses it
+# automatically. Local dev falls back to SQLite if DATABASE_URL is unset.
+import dj_database_url
+
+_db_default = f"sqlite:///{os.path.join(BASE_DIR, 'db.sqlite3')}"
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
+    'default': dj_database_url.config(
+        default=_db_default,
+        conn_max_age=600,
+        ssl_require=os.environ.get('DATABASE_URL', '').startswith('postgres'),
+    )
 }
 
 # ── Password Hashers ──────────────────────────────────────────────────────
