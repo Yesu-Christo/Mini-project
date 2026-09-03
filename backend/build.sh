@@ -2,9 +2,15 @@
 # Exit on error
 set -o errexit
 
+echo ">>> Installing Python dependencies..."
 pip install -r requirements.txt
+
+echo ">>> Collecting static files..."
 python manage.py collectstatic --no-input
-python manage.py migrate
+
+echo ">>> Running database migrations..."
+python manage.py migrate --run-syncdb
+echo ">>> Migrations complete."
 
 # ── DO NOT run loaddata here ──────────────────────────────────────────────
 # Loading fixtures on every deploy would wipe all real user/incident data
