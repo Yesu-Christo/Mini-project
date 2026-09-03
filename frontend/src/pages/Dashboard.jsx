@@ -1,4 +1,5 @@
 import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts';
 import { AlertTriangle, CalendarDays, MapPin, BrainCircuit, ShieldAlert, RefreshCw } from 'lucide-react';
@@ -8,6 +9,7 @@ import Table from '../components/Table';
 import Modal from '../components/Modal';
 import { useAppData } from '../context/AppDataContext';
 import { useAuth } from '../context/AuthContext';
+import { getIncidents } from '../services/api';
 
 const computeDynamicWeeklyTrends = (incidents = [], backendWeeklyTrends = []) => {
   if (backendWeeklyTrends && backendWeeklyTrends.length > 0) {
@@ -59,17 +61,35 @@ export default function Dashboard() {
   const [selectedIncident, setSelectedIncident] = useState(null);
   const [statusUpdating, setStatusUpdating] = useState(false);
   const [statusMessage, setStatusMessage] = useState('');
+  const [localIncidents, setLocalIncidents] = useState([]);
+
+  // Fetch incidents directly — context incidents may be empty if the
+  // auth token wasn't resolved on first load (demo mode + empty Postgres).
+  useEffect(() => {
+    getIncidents()
+      .then(res => {
+        const data = res.data;
+        setLocalIncidents(data.incidents || data || []);
+      })
+      .catch(() => {
+        // Auth failed — use whatever is in context
+        setLocalIncidents([]);
+      });
+  }, []);
+
+  // Use direct fetch if available, fall back to context
+  const allIncidents = localIncidents.length > 0 ? localIncidents : incidents;
 
   const reviewStatuses = ['Reported', 'Under Review', 'Verified', 'Resolved', 'Dismissed'];
   const canReviewIncidents = user?.role === 'ADMIN' || user?.role === 'SECURITY';
 
   const incidentSummary = useMemo(() => {
-    return incidents?.slice(0, 5) || [];
-  }, [incidents]);
+    return allIncidents?.slice(0, 5) || [];
+  }, [allIncidents]);
 
   const chartWeeklyData = useMemo(() => {
-    return computeDynamicWeeklyTrends(incidents, weeklyTrends);
-  }, [incidents, weeklyTrends]);
+    return computeDynamicWeeklyTrends(allIncidents, weeklyTrends);
+  }, [allIncidents, weeklyTrends]);
 
   const openIncident = (incident) => {
     setSelectedIncident(incident);
