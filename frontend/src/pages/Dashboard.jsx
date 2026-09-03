@@ -59,7 +59,6 @@ export default function Dashboard() {
   const [selectedIncident, setSelectedIncident] = useState(null);
   const [statusUpdating, setStatusUpdating] = useState(false);
   const [statusMessage, setStatusMessage] = useState('');
-  const [recentIncidentList, setRecentIncidentList] = useState([]);
 
   const reviewStatuses = ['Reported', 'Under Review', 'Verified', 'Resolved', 'Dismissed'];
   const canReviewIncidents = user?.role === 'ADMIN' || user?.role === 'SECURITY';
@@ -74,13 +73,11 @@ export default function Dashboard() {
 
   const openIncident = (incident) => {
     setSelectedIncident(incident);
-    setRecentIncidentList(incidentSummary);
     setStatusMessage('');
   };
 
   const openIncidentList = () => {
     setSelectedIncident({ listMode: true, title: 'Recent incidents' });
-    setRecentIncidentList(incidentSummary);
     setStatusMessage('');
   };
 
@@ -176,7 +173,7 @@ export default function Dashboard() {
       <Modal isOpen={!!selectedIncident} onClose={() => setSelectedIncident(null)} title={selectedIncident?.listMode ? 'Recent incidents' : `Incident ${selectedIncident?.incident_id || selectedIncident?.id}`}>
         {selectedIncident && selectedIncident.listMode ? (
           <div style={{ display: 'grid', gap: '0.75rem' }}>
-            {recentIncidentList.length ? recentIncidentList.map((incident) => (
+            {incidentSummary.length ? incidentSummary.map((incident) => (
               <button
                 key={incident.incident_id || incident.id}
                 className="btn btn-ghost"
@@ -193,7 +190,6 @@ export default function Dashboard() {
                 }}
                 onClick={() => {
                   setSelectedIncident(incident);
-                  setRecentIncidentList(incidentSummary);
                 }}
               >
                 <span style={{ minWidth: 0, flex: '1 1 auto', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', fontSize: '0.85rem' }}>
@@ -207,7 +203,7 @@ export default function Dashboard() {
                 </span>
               </button>
             )) : (
-              <div className="alert alert-info">No recent incidents available.</div>
+              <div className="alert alert-info">No incidents reported yet.</div>
             )}
           </div>
         ) : selectedIncident && (
