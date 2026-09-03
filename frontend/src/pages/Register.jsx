@@ -83,44 +83,59 @@ export default function Register() {
 
     setLoading(true);
 
-    try {
-      await register({
-        role,
-        first_name: formData.first_name.trim(),
-        last_name: formData.last_name.trim(),
-        other_name: formData.other_name.trim(),
-        title: formData.title,
-        school_id: formData.school_id.trim().toUpperCase(),
-        email: formData.email.trim(),
-        department: formData.department.trim(),
-        program: role === 'STUDENT' ? formData.program.trim() : undefined,
-        occupation: isStaffRole ? formData.occupation.trim() : undefined,
-        password: formData.password,
-      });
+    // Render free tier cold starts can take 50+ seconds. Retry up to 3 times
+    // with a 5-second gap when we get a network error (connection refused).
+    const MAX_RETRIES = 3;
+    const RETRY_DELAY = 5000;
 
-      setSuccess('Registration successful! Redirecting to login...');
-      setTimeout(() => navigate('/login'), 1500);
-    } catch (err) {
-      const serverMsg = err?.response?.data?.error;
-      const status = err?.response?.status;
-      const isTimeout = err?.code === 'ECONNABORTED' || err?.message?.includes('timeout');
-      const isNetworkError = !err?.response && !isTimeout;
-      if (serverMsg) {
-        setError(serverMsg);
-      } else if (status === 400) {
-        setError('Registration failed — check all fields and try again.');
-      } else if (status === 403) {
-        setError('That School ID or email is already registered.');
-      } else if (isTimeout) {
-        setError('The server is waking up (Render cold start) — please wait 30 seconds and try again.');
-      } else if (isNetworkError || !navigator.onLine) {
-        setError('Cannot reach the server. Check your internet or try again shortly.');
-      } else {
-        setError(`Registration failed (${status || 'unknown error'}). Please try again.`);
+    for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
+      try {
+        await register({
+          role,
+          first_name: formData.first_name.trim(),
+          last_name: formData.last_name.trim(),
+          other_name: formData.other_name.trim(),
+          title: formData.title,
+          school_id: formData.school_id.trim().toUpperCase(),
+          email: formData.email.trim(),
+          department: formData.department.trim(),
+          program: role === 'STUDENT' ? formData.program.trim() : undefined,
+          occupation: isStaffRole ? formData.occupation.trim() : undefined,
+          password: formData.password,
+        });
+
+        setSuccess('Registration successful! Redirecting to login...');
+        setTimeout(() => navigate('/login'), 1500);
+        return; // success — exit the loop
+      } catch (err) {
+        const serverMsg = err?.response?.data?.error;
+        const status = err?.response?.status;
+        const isNetworkError = !err?.response;
+
+        // If the server returned an actual response, don't retry — it's a real error
+        if (!isNetworkError) {
+          if (serverMsg) {
+            setError(serverMsg);
+          } else if (status === 403) {
+            setError('That School ID or email is already registered.');
+          } else {
+            setError(`Registration failed (${status}). Please try again.`);
+          }
+          setLoading(false);
+          return;
+        }
+
+        // Network error (cold start) — retry if attempts remain
+        if (attempt < MAX_RETRIES) {
+          setError(`Server is waking up… retrying (${attempt}/${MAX_RETRIES - 1})`);
+          await new Promise(resolve => setTimeout(resolve, RETRY_DELAY));
+        } else {
+          setError('Server is still starting up. Please wait 30 seconds and try again.');
+        }
       }
-    } finally {
-      setLoading(false);
     }
+
+    setLoading(false);
   };
 
   const rolesConfig = [
