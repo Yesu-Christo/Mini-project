@@ -112,13 +112,6 @@ export default function ReportIncident() {
       } else {
         displayMsg = 'Failed to submit incident. Please try again.';
       }
-      } else if (serverMsg) {
-        displayMsg = serverMsg;
-      } else if (!navigator.onLine) {
-        displayMsg = 'No internet connection. Please check your network and try again.';
-      } else {
-        displayMsg = 'Failed to submit incident. Please try again.';
-      }
       setMsg(displayMsg);
       setStatus('error');
     } finally {
