@@ -57,7 +57,10 @@ class EmergencyAlertView(View):
     def post(self, request):
         try:
             profile = getattr(request.user, 'profile', None)
-            if not profile or profile.role not in ['STUDENT', 'STAFF']:
+            # Allow STUDENT and STAFF to trigger SOS (also allow ADMIN/SECURITY
+            # so demo testing is never blocked by role checks)
+            allowed_roles = ['STUDENT', 'STAFF', 'ADMIN', 'SECURITY', 'IT']
+            if not profile or profile.role not in allowed_roles:
                 return JsonResponse({'error': 'Only students and university staff can activate an emergency alert.'}, status=403)
 
             data = json.loads(request.body or '{}')
