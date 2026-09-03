@@ -29,24 +29,22 @@ export function AuthProvider({ children }) {
       setUser(userData);
       return { success: true };
     } catch (err) {
-      // Graceful fallback for demo if backend is not running
-      const mockUsers = {
-        STU001: { id: 3, username: 'student1', email: `student1@${DEMO_EMAIL_DOMAIN}`, role: 'STUDENT', school_id: 'STU001' },
-        SEC001: { id: 2, username: 'security1', email: `sec1@${DEMO_EMAIL_DOMAIN}`, role: 'SECURITY', school_id: 'SEC001' },
-        ADM001: { id: 1, username: 'admin',    email: `admin@${DEMO_EMAIL_DOMAIN}`,    role: 'ADMIN',    school_id: 'ADM001' },
-        STF001: { id: 4, username: 'staff1',   email: `staff1@${DEMO_EMAIL_DOMAIN}`,   role: 'STAFF',    school_id: 'STF001' },
-        IT001:  { id: 5, username: 'it1',      email: `it1@${DEMO_EMAIL_DOMAIN}`,      role: 'IT',       school_id: 'IT001' },
-      };
-      if (mockUsers[school_id] && password) {
-        const userData = mockUsers[school_id];
-        // Use school_id directly as the token — the backend middleware resolves
-        // tokens by looking up UserProfile.school_id, so "demo-token-STU001"
-        // would never match. Storing the raw school_id fixes auth for all API
-        // calls (emergency SOS, status updates, incident creation) in demo mode.
-        localStorage.setItem(TOKEN_KEY, school_id);
-        localStorage.setItem(USER_KEY, JSON.stringify(userData));
-        setUser(userData);
-        return { success: true, demo: true };
+      // Graceful fallback for demo if backend is not running (e.g. network error)
+      if (!err.response) {
+        const mockUsers = {
+          STU001: { id: 3, username: 'student1', email: `student1@${DEMO_EMAIL_DOMAIN}`, role: 'STUDENT', school_id: 'STU001' },
+          SEC001: { id: 2, username: 'security1', email: `sec1@${DEMO_EMAIL_DOMAIN}`, role: 'SECURITY', school_id: 'SEC001' },
+          ADM001: { id: 1, username: 'admin',    email: `admin@${DEMO_EMAIL_DOMAIN}`,    role: 'ADMIN',    school_id: 'ADM001' },
+          STF001: { id: 4, username: 'staff1',   email: `staff1@${DEMO_EMAIL_DOMAIN}`,   role: 'STAFF',    school_id: 'STF001' },
+          IT001:  { id: 5, username: 'it1',      email: `it1@${DEMO_EMAIL_DOMAIN}`,      role: 'IT',       school_id: 'IT001' },
+        };
+        if (mockUsers[school_id] && password) {
+          const userData = mockUsers[school_id];
+          localStorage.setItem(TOKEN_KEY, school_id);
+          localStorage.setItem(USER_KEY, JSON.stringify(userData));
+          setUser(userData);
+          return { success: true, demo: true };
+        }
       }
       return { success: false, error: err?.response?.data?.error || 'Invalid credentials' };
     }
