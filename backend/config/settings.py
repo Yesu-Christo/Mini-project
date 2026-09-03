@@ -91,9 +91,11 @@ DATABASES = {
     'default': dj_database_url.config(
         default=_db_default,
         conn_max_age=600,
-        ssl_require=_db_url.startswith('postgres'),  # covers postgres:// and postgresql://
+        ssl_require=_db_url.startswith('postgres'),
     )
 }
+# psycopg3 (psycopg[binary]) uses the django.db.backends.postgresql engine
+# which works with both psycopg2 and psycopg3 — no engine override needed.
 
 # ── Password Hashers ──────────────────────────────────────────────────────
 PASSWORD_HASHERS = [
