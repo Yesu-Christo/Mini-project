@@ -113,7 +113,6 @@ USE_I18N = True
 USE_TZ = True
 
 # ── Email ─────────────────────────────────────────────────────────────────
-EMAIL_BACKEND     = os.environ.get('EMAIL_BACKEND', 'django.core.mail.backends.console.EmailBackend')
 EMAIL_HOST        = os.environ.get('EMAIL_HOST', 'smtp.gmail.com')
 EMAIL_PORT        = int(os.environ.get('EMAIL_PORT', '587'))
 EMAIL_HOST_USER   = os.environ.get('EMAIL_HOST_USER', '')
@@ -122,6 +121,12 @@ EMAIL_USE_TLS     = os.environ.get('EMAIL_USE_TLS', 'True') == 'True'
 EMAIL_USE_SSL     = os.environ.get('EMAIL_USE_SSL', 'False') == 'True'
 DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL', 'CampusShield AI <noreply@campusshield.local>')
 FRONTEND_URL      = os.environ.get('FRONTEND_URL', 'http://localhost:5173')
+
+# Automatically use SMTP if a password is provided, otherwise default to console (for local dev)
+if EMAIL_HOST_PASSWORD and 'EMAIL_BACKEND' not in os.environ:
+    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+else:
+    EMAIL_BACKEND = os.environ.get('EMAIL_BACKEND', 'django.core.mail.backends.console.EmailBackend')
 
 # ── Static & Media ────────────────────────────────────────────────────────
 STATIC_URL  = '/static/'

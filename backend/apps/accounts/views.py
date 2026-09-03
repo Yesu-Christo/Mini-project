@@ -189,6 +189,7 @@ class RegisterView(View):
 
             return JsonResponse({'message': 'Registration successful', 'role': role}, status=201)
         except Exception as e:
+            logger.error("Registration failed: %s", e, exc_info=True)
             return JsonResponse({'error': str(e)}, status=400)
 
 @method_decorator(csrf_exempt, name='dispatch')
