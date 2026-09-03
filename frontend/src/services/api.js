@@ -4,7 +4,7 @@ import axios from 'axios';
 // Configuration — read from environment variables (set in frontend/.env)
 // ---------------------------------------------------------------------------
 const BASE_URL    = import.meta.env.VITE_API_BASE_URL  || '/api';
-const TIMEOUT     = Number(import.meta.env.VITE_API_TIMEOUT) || 10000;
+const TIMEOUT     = Number(import.meta.env.VITE_API_TIMEOUT) || 60000;
 const TOKEN_KEY   = import.meta.env.VITE_TOKEN_KEY     || 'cs_token';
 
 const api = axios.create({

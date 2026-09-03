@@ -103,16 +103,20 @@ export default function Register() {
     } catch (err) {
       const serverMsg = err?.response?.data?.error;
       const status = err?.response?.status;
+      const isTimeout = err?.code === 'ECONNABORTED' || err?.message?.includes('timeout');
+      const isNetworkError = !err?.response && !isTimeout;
       if (serverMsg) {
         setError(serverMsg);
       } else if (status === 400) {
         setError('Registration failed — check all fields and try again.');
       } else if (status === 403) {
         setError('That School ID or email is already registered.');
-      } else if (!navigator.onLine) {
-        setError('No internet connection. Please check your network.');
+      } else if (isTimeout) {
+        setError('The server is waking up (Render cold start) — please wait 30 seconds and try again.');
+      } else if (isNetworkError || !navigator.onLine) {
+        setError('Cannot reach the server. Check your internet or try again shortly.');
       } else {
-        setError('Registration failed. Please try again.');
+        setError(`Registration failed (${status || 'unknown error'}). Please try again.`);
       }
     } finally {
       setLoading(false);
