@@ -12,9 +12,18 @@ echo ">>> Running database migrations..."
 python manage.py migrate --run-syncdb
 echo ">>> Migrations complete."
 
-# ── DO NOT run loaddata here ──────────────────────────────────────────────
-# Loading fixtures on every deploy would wipe all real user/incident data
-# back to the 4 seeded demo accounts each time the service restarts.
-#
-# To seed a brand-new Postgres DB for the first time, run manually once:
-#   python manage.py loaddata fixtures/initial_data.json
+# ── Seed demo accounts on first deploy only ───────────────────────────────
+# Checks if any users exist before loading — safe to run on every deploy.
+# On a fresh Postgres DB (e.g. after migration) this seeds the 4 demo
+# accounts. On subsequent deploys with real user data it does nothing.
+echo ">>> Checking if demo seed is needed..."
+python manage.py shell -c "
+from django.contrib.auth.models import User
+if User.objects.count() == 0:
+    from django.core.management import call_command
+    call_command('loaddata', 'fixtures/initial_data.json')
+    print('Demo accounts seeded.')
+else:
+    print(f'Skipping seed — {User.objects.count()} user(s) already exist.')
+"
+echo ">>> Done."
